@@ -30,10 +30,10 @@ export function InnovaLabsLogo({ className = "h-6 w-6" }: { className?: string }
   )
 }
 
-// Combined Header Logo for Admin
+// Header Logo for Dashboard
 export function HeaderLogo() {
   return (
-    <Link href="/admin" className="flex items-center gap-2">
+    <Link href="/" className="flex items-center gap-2">
       <Image 
         src="/logo.png" 
         alt="InnovaSci Open Academy"

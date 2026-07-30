@@ -10,144 +10,20 @@ import { AcademyLogo } from "@/components/layout/logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-// Role to portal mapping
-const ROLE_PORTAL_MAP: Record<string, string> = {
-  SUPER_ADMIN: "/admin",
-  ADMIN: "/admin",
-  CONTENT_MANAGER: "/admin",
-  SUPPORT_STAFF: "/admin",
-  STUDENT: "/dashboard",
-  INSTRUCTOR: "/dashboard",
-  REVIEWER: "/dashboard",
-  ACADEMIC_DIRECTOR: "/dashboard",
-  FINANCE: "/admin",
-  ADMISSIONS: "/dashboard",
-}
-
-// Error messages mapping
-const AUTH_ERROR_MESSAGES: Record<string, { user: string; tech?: string }> = {
-  "CredentialsSignin": {
-    user: "Invalid email or password. Please check your credentials and try again.",
-  },
-  "User not found in database": {
-    user: "No account found with this email address.",
-  },
-  "User account is NOT active": {
-    user: "Your account is not active. Please contact support.",
-  },
-  "User has no password hash": {
-    user: "This account appears to use a different login method. Please use the original sign-in provider.",
-  },
-  "User Not Found": {
-    user: "No account found with this email address.",
-  },
-  "Invalid Password": {
-    user: "The password you entered is incorrect.",
-  },
-  "Account Inactive": {
-    user: "Your account is inactive. Please contact support.",
-  },
-  "Account Suspended": {
-    user: "Your account has been suspended. Please contact support.",
-  },
-}
-
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") || ""
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
-  const [errorType, setErrorType] = useState<"error" | "warning" | "info">("error")
   const [isLoading, setIsLoading] = useState(false)
-
-  // Get redirect URL based on role
-  const getRedirectUrl = (role: string | undefined): string => {
-    console.log("[Login] ============================================")
-    console.log("[Login] getRedirectUrl() called")
-    console.log("[Login] >>> INPUT role: '" + role + "' <<<")
-    console.log("[Login] >>> typeof role: " + typeof role)
-    console.log("[Login] ============================================")
-    
-    // Check if callbackUrl is provided and is a valid internal URL
-    if (callbackUrl && callbackUrl.startsWith("/")) {
-      console.log("[Login] Using callbackUrl:", callbackUrl)
-      console.log("[Login] ============================================")
-      return callbackUrl
-    }
-    
-    // CRITICAL: This MUST use the Prisma role from JWT/Session, NOT Supabase role
-    console.log("[Login] Checking role: '" + role + "'")
-    
-    if (role === "ADMIN") {
-      console.log("[Login] >>> ROLE MATCHES ADMIN! Redirecting to /admin")
-      console.log("[Login] ============================================")
-      return "/admin"
-    }
-    if (role === "SUPER_ADMIN") {
-      console.log("[Login] >>> ROLE MATCHES SUPER_ADMIN! Redirecting to /admin")
-      console.log("[Login] ============================================")
-      return "/admin"
-    }
-    if (role === "CONTENT_MANAGER") {
-      console.log("[Login] >>> ROLE MATCHES CONTENT_MANAGER! Redirecting to /admin")
-      console.log("[Login] ============================================")
-      return "/admin"
-    }
-    if (role === "FINANCE") {
-      console.log("[Login] >>> ROLE MATCHES FINANCE! Redirecting to /admin")
-      console.log("[Login] ============================================")
-      return "/admin"
-    }
-    if (role === "SUPPORT_STAFF") {
-      console.log("[Login] >>> ROLE MATCHES SUPPORT_STAFF! Redirecting to /admin")
-      console.log("[Login] ============================================")
-      return "/admin"
-    }
-    if (role === "STUDENT") {
-      console.log("[Login] >>> ROLE MATCHES STUDENT! Redirecting to /dashboard")
-      console.log("[Login] ============================================")
-      return "/dashboard"
-    }
-    if (role === "INSTRUCTOR") {
-      console.log("[Login] >>> ROLE MATCHES INSTRUCTOR! Redirecting to /dashboard")
-      console.log("[Login] ============================================")
-      return "/dashboard"
-    }
-    if (role === "REVIEWER") {
-      console.log("[Login] >>> ROLE MATCHES REVIEWER! Redirecting to /dashboard")
-      console.log("[Login] ============================================")
-      return "/dashboard"
-    }
-    if (role === "ACADEMIC_DIRECTOR") {
-      console.log("[Login] >>> ROLE MATCHES ACADEMIC_DIRECTOR! Redirecting to /dashboard")
-      console.log("[Login] ============================================")
-      return "/dashboard"
-    }
-    if (role === "ADMISSIONS") {
-      console.log("[Login] >>> ROLE MATCHES ADMISSIONS! Redirecting to /dashboard")
-      console.log("[Login] ============================================")
-      return "/dashboard"
-    }
-    
-    // Default fallback - CRITICAL: This should never happen if role is correctly set
-    console.log("[Login] >>> WARNING: Role '" + role + "' did NOT match any admin role!")
-    console.log("[Login] >>> Defaulting to /dashboard (this is likely a BUG if user is ADMIN!)")
-    console.log("[Login] ============================================")
-    return "/dashboard"
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
-    setErrorType("error")
     setIsLoading(true)
-
-    console.log("[Login] ============================================")
-    console.log("[Login] Form submitted for:", email)
-    console.log("[Login] ============================================")
 
     try {
       const result = await signIn("credentials", {
@@ -157,71 +33,18 @@ function LoginForm() {
       })
 
       if (result?.error) {
-        console.log("[Login] signIn ERROR:", result.error)
-        console.log("[Login] ============================================")
-        
-        // Get user-friendly error message
-        const errorInfo = AUTH_ERROR_MESSAGES[result.error] || {
-          user: "Invalid email or password. Please try again.",
-        }
-        setError(errorInfo.user)
-        
-        // Set error type based on the error
-        if (result.error.includes("not active") || result.error.includes("suspended")) {
-          setErrorType("warning")
-        }
-        
+        setError("Invalid email or password. Please check your credentials and try again.")
         setIsLoading(false)
         return
       }
 
-      console.log("[Login] signIn SUCCESS - fetching session...")
-      console.log("[Login] ============================================")
-
-      // Fetch user role from session API - this reads directly from JWT token
-      const res = await fetch("/api/auth/session")
-      const data = await res.json()
-      
-      console.log("[Login] ============================================")
-      console.log("[Login] Session API response:", JSON.stringify(data))
-      console.log("[Login] >>> data?.user:", data?.user)
-      console.log("[Login] >>> data?.user?.role:", data?.user?.role)
-      console.log("[Login] >>> typeof data?.user?.role:", typeof data?.user?.role)
-      console.log("[Login] ============================================")
-      
-      if (data?.user?.role) {
-        console.log("[Login] Role from session:", data.user.role)
-        
-        // CRITICAL: Check if role is the Supabase 'authenticated' role (should never happen)
-        if (data.user.role === 'authenticated') {
-          console.error("[Login] CRITICAL ERROR: Role is 'authenticated'!")
-          console.error("[Login] This should NEVER happen - Prisma role must be in session!")
-          setError("Authentication error: role mismatch. Please contact support.")
-          setIsLoading(false)
-          return
-        }
-        
-        const redirectUrl = getRedirectUrl(data.user.role)
-        console.log("[Login] ============================================")
-        console.log("[Login] FINAL REDIRECT URL:", redirectUrl)
-        console.log("[Login] Expected for ADMIN: /admin")
-        console.log("[Login] ============================================")
-        router.push(redirectUrl)
-        router.refresh()
-      } else {
-        // Fallback: redirect based on result if session fetch fails
-        console.log("[Login] >>> WARNING: data?.user?.role is falsy (undefined/null)!")
-        console.log("[Login] >>> This means the role was NOT returned from the session API!")
-        console.log("[Login] >>> Defaulting to /dashboard")
-        console.log("[Login] ============================================")
-        router.push("/dashboard")
-        router.refresh()
-      }
+      // Redirect to dashboard or callback URL
+      const redirectUrl = callbackUrl && callbackUrl.startsWith("/") ? callbackUrl : "/dashboard"
+      router.push(redirectUrl)
+      router.refresh()
     } catch (err) {
-      console.error("[Login] Exception:", err)
-      console.log("[Login] ============================================")
+      console.error("Login error:", err)
       setError("An error occurred. Please try again later.")
-      setErrorType("error")
       setIsLoading(false)
     }
   }
@@ -248,13 +71,7 @@ function LoginForm() {
           <div className="px-6 pb-6 pt-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
-                  errorType === "warning" 
-                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                    : errorType === "info"
-                    ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                    : "bg-destructive/10 text-destructive"
-                }`}>
+                <div className="flex items-center gap-2 p-3 rounded-lg text-sm bg-destructive/10 text-destructive">
                   <AlertCircle className="h-4 w-4 flex-shrink-0" />
                   {error}
                 </div>

@@ -195,7 +195,7 @@ export default function StudentProjectsPage() {
         
         // Get mini-projects for the course
         try {
-          const miniProjectsRes = await fetch(`/api/admin/courses/${enrollment.course.id}/mini-project`)
+          const miniProjectsRes = await fetch(`/api/public/mini-projects/${enrollment.course.id}`)
           const miniProjectsData = await miniProjectsRes.json()
           
           if (!miniProjectsRes.ok) {
@@ -221,7 +221,7 @@ export default function StudentProjectsPage() {
       
       // Also fetch capstone projects
       try {
-        const capstoneRes = await fetch("/api/admin/capstones/difficulty")
+        const capstoneRes = await fetch("/api/public/capstones/difficulty")
         const capstoneData = await capstoneRes.json()
         
         if (!capstoneRes.ok) {

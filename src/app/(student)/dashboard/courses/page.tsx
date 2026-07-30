@@ -44,7 +44,7 @@ export default function MyCoursesPage() {
       try {
         const [domainsRes, categoriesRes] = await Promise.all([
           fetch("/api/public/domains"),
-          fetch("/api/admin/categories?includeInactive=true")
+          fetch("/api/public/categories?includeInactive=true")
         ])
         
         const domainsData = await domainsRes.json()

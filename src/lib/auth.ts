@@ -3,21 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
-// Extend the User type to include role
-interface UserWithRole {
-  id: string
-  email: string
-  name?: string | null
-  image?: string | null
-  role: string
-}
-
-// Debug helper to trace role through the authentication pipeline
-function debugRole(label: string, value: string | undefined, context?: string) {
-  const ctx = context ? ` [${context}]` : ''
-  console.log(`[DEBUG-ROLE] ${label}: "${value}"${ctx}`)
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -26,32 +11,22 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials): Promise<UserWithRole | null> {
-        console.log("[Auth] ============================================")
-        console.log("[Auth] LOGIN ATTEMPT:", credentials?.email)
-        console.log("[Auth] ============================================")
-        
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log("[Auth] Missing credentials - REJECTING")
           return null
         }
 
         const normalizedEmail = credentials.email.toLowerCase().trim()
-        console.log("[Auth] Normalized email:", normalizedEmail)
 
-        // PRIMARY: Try Supabase Auth first (if configured)
+        // Try Supabase Auth first (if configured)
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
         const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
         const isSupabaseConfigured = supabaseUrl && supabaseKey && 
           supabaseUrl !== "https://your-project.supabase.co" &&
           supabaseUrl.startsWith("https://")
         
-        console.log("[Auth] Supabase configured:", isSupabaseConfigured)
-        
         if (isSupabaseConfigured) {
           try {
-            console.log("[Auth] >>> Trying Supabase Auth...")
-            
             const { createClient } = await import("@supabase/supabase-js")
             const supabase = createClient(supabaseUrl, supabaseKey)
 
@@ -61,191 +36,81 @@ export const authOptions: NextAuthOptions = {
             })
 
             if (!signInError && signInData.user) {
-              console.log("[Auth] >>> Supabase auth SUCCESS for:", signInData.user.email)
-              console.log("[Auth] Supabase user ID:", signInData.user.id)
-              console.log("[Auth] Supabase user role (from auth.users):", signInData.user.role)
-              console.log("[Auth] WARNING: Supabase auth.users.role should NOT be used for authorization!")
-              console.log("[Auth] CRITICAL: We MUST use Prisma public.users.role instead!")
-              
-              // Get Prisma user - CRITICAL: PRESERVE THEIR EXISTING ROLE
-              try {
-                console.log("[Auth] >>> Looking up Prisma user by email...")
-                const prismaUser = await prisma.user.findFirst({
-                  where: { email: normalizedEmail },
+              const prismaUser = await prisma.user.findFirst({
+                where: { email: normalizedEmail },
+                include: { profile: true }
+              })
+
+              if (prismaUser) {
+                return {
+                  id: prismaUser.id,
+                  email: prismaUser.email,
+                  name: prismaUser.profile?.fullName || prismaUser.email.split("@")[0],
+                  role: prismaUser.role
+                }
+              } else {
+                // New user - create with STUDENT role
+                const newPrismaUser = await prisma.user.create({
+                  data: {
+                    email: signInData.user.email!,
+                    role: "STUDENT",
+                    status: "ACTIVE",
+                  },
                   include: { profile: true }
                 })
-
-                if (prismaUser) {
-                  // User exists in Prisma - use their existing role
-                  console.log("[Auth] ============================================")
-                  console.log("[Auth] FOUND Prisma user!")
-                  console.log("[Auth] Prisma user ID:", prismaUser.id)
-                  console.log("[Auth] Prisma user email:", prismaUser.email)
-                  console.log("[Auth] >>> Prisma user role: '" + prismaUser.role + "' <<<")
-                  console.log("[Auth] Prisma user status:", prismaUser.status)
-                  console.log("[Auth] ============================================")
-                  
-                  // Return user with their EXISTING Prisma role (preserves ADMIN, SUPER_ADMIN, etc.)
-                  // NEVER use Supabase role or metadata role - always use Prisma role
-                  const result: UserWithRole = {
-                    id: prismaUser.id,
-                    email: prismaUser.email,
-                    name: prismaUser.profile?.fullName || prismaUser.email.split("@")[0],
-                    role: prismaUser.role // CRITICAL: This is the ONLY source of truth for authorization
-                  }
-                  
-                  console.log("[Auth] >>> RESULT.role = '" + result.role + "' <<<")
-                  debugRole("authorize() returning role", result.role, "Supabase path")
-                  console.log("[Auth] FINAL RESULT from authorize():", JSON.stringify(result))
-                  console.log("[Auth] ============================================")
-                  
-                  return result
-                } else {
-                  // New user - create with STUDENT role
-                  console.log("[Auth] No Prisma user found - creating new user with STUDENT role")
-                  const newPrismaUser = await prisma.user.create({
-                    data: {
-                      email: signInData.user.email!,
-                      role: "STUDENT", // New users default to STUDENT
-                      status: "ACTIVE",
-                    },
-                    include: { profile: true }
-                  })
-                  
-                  const result: UserWithRole = {
-                    id: newPrismaUser.id,
-                    email: newPrismaUser.email,
-                    name: newPrismaUser.email.split("@")[0],
-                    role: newPrismaUser.role
-                  }
-                  
-                  console.log("[Auth] New user created:", JSON.stringify(result))
-                  return result
+                
+                return {
+                  id: newPrismaUser.id,
+                  email: newPrismaUser.email,
+                  name: newPrismaUser.email.split("@")[0],
+                  role: newPrismaUser.role
                 }
-              } catch (prismaError) {
-                console.error("[Auth] >>> Prisma sync ERROR:", prismaError)
-                console.error("[Auth] >>> CRITICAL: Prisma lookup failed during Supabase auth!")
-                console.error("[Auth] >>> Cannot use Supabase role - must use Prisma role!")
-                console.error("[Auth] >>> Returning null - authentication FAILED")
-                // DO NOT fallback to Supabase metadata or STUDENT role
-                // This is a CRITICAL error - we cannot authenticate without Prisma role
-                return null
               }
             }
-            
-            console.log("[Auth] Supabase auth failed:", signInError?.message)
-            console.log("[Auth] Error code:", signInError?.code)
           } catch (supabaseError) {
             console.error("[Auth] Supabase error:", supabaseError)
           }
-        } else {
-          console.log("[Auth] Supabase not configured - using Prisma only")
         }
 
-        // FALLBACK: Try Prisma database with bcrypt
-        console.log("[Auth] >>> Trying Prisma database fallback...")
-        
+        // Fallback: Prisma database with bcrypt
         try {
           const prismaUser = await prisma.user.findFirst({
             where: { email: normalizedEmail },
             include: { profile: true }
           })
 
-          if (prismaUser) {
-            console.log("[Auth] Found Prisma user:", prismaUser.id)
-            console.log("[Auth] >>> Prisma user role: '" + prismaUser.role + "' <<<")
-            
-            if (prismaUser.passwordHash) {
-              const isValid = await bcrypt.compare(credentials.password, prismaUser.passwordHash)
-              if (isValid) {
-                console.log("[Auth] >>> Prisma auth SUCCESS!")
-                
-                const result: UserWithRole = {
-                  id: prismaUser.id,
-                  email: prismaUser.email,
-                  name: prismaUser.profile?.fullName || prismaUser.email.split("@")[0],
-                  role: prismaUser.role
-                }
-                
-                console.log("[Auth] >>> RESULT.role = '" + result.role + "' <<<")
-                debugRole("authorize() returning role", result.role, "Prisma path")
-                console.log("[Auth] FINAL RESULT from authorize():", JSON.stringify(result))
-                
-                return result
+          if (prismaUser && prismaUser.passwordHash) {
+            const isValid = await bcrypt.compare(credentials.password, prismaUser.passwordHash)
+            if (isValid) {
+              return {
+                id: prismaUser.id,
+                email: prismaUser.email,
+                name: prismaUser.profile?.fullName || prismaUser.email.split("@")[0],
+                role: prismaUser.role
               }
-              console.log("[Auth] Invalid password")
-            } else {
-              console.log("[Auth] User has no password hash - cannot authenticate via Prisma fallback")
             }
-          } else {
-            console.log("[Auth] User not found in Prisma")
           }
         } catch (prismaError) {
           console.error("[Auth] Prisma error:", prismaError)
         }
 
-        console.log("[Auth] >>> Authentication FAILED - returning null")
         return null
       }
     })
   ],
   callbacks: {
     async jwt({ token, user }) {
-      console.log("[Auth] ============================================")
-      console.log("[Auth] JWT CALLBACK INVOKED")
-      console.log("[Auth] Token before:", JSON.stringify({ id: token.id, role: token.role }))
-      
       if (user) {
-        // Cast user to our extended type
-        const authUser = user as UserWithRole
-        console.log("[Auth] User object received:", JSON.stringify({ id: authUser.id, role: authUser.role }))
-        console.log("[Auth] >>> incomingRole from user.role: '" + authUser.role + "' <<<")
-        
-        token.id = authUser.id
-        token.role = authUser.role
-        
-        console.log("[Auth] >>> token.role SET TO: '" + token.role + "' <<<")
-        console.log("[Auth] JWT token after:", JSON.stringify({ id: token.id, role: token.role }))
-        console.log("[Auth] ============================================")
-        
-        // CRITICAL: Never let Supabase role override Prisma role
-        if (authUser.role === 'authenticated' || !authUser.role) {
-          console.error("[Auth] CRITICAL ERROR: Role is 'authenticated' or undefined!")
-          console.error("[Auth] This means Supabase metadata leaked through!")
-        }
-      } else {
-        console.log("[Auth] No user object in JWT callback - token refresh")
-        console.log("[Auth] Keeping existing token role:", token.role)
+        token.id = user.id
+        token.role = (user as any).role || "STUDENT"
       }
-      
-      console.log("[Auth] DEBUG >>> Final JWT token.role = '" + token.role + "'")
-      console.log("[Auth] ============================================")
-      
       return token
     },
     async session({ session, token }) {
-      console.log("[Auth] ============================================")
-      console.log("[Auth] SESSION CALLBACK INVOKED")
-      console.log("[Auth] Token role from JWT:", token.role)
-      
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
-        
-        console.log("[Auth] >>> session.user.role SET TO: '" + session.user.role + "' <<<")
-        console.log("[Auth] Session user after:", JSON.stringify({ id: session.user.id, role: session.user.role }))
-        console.log("[Auth] ============================================")
-        
-        // CRITICAL: Verify we're not using Supabase 'authenticated' role
-        if (session.user.role === 'authenticated') {
-          console.error("[Auth] CRITICAL ERROR: Session role is 'authenticated'!")
-          console.error("[Auth] This should NEVER happen - Prisma role must be used!")
-        }
       }
-      
-      console.log("[Auth] DEBUG >>> Final session.user.role = '" + session.user?.role + "'")
-      console.log("[Auth] ============================================")
-      
       return session
     }
   },
