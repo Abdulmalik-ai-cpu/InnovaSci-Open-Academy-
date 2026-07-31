@@ -1,4 +1,4 @@
-# InnovaSci Open Academy — Forensic Investigation Report
+# InnovaSci Open Academy — Phase 1 Cleanup Report
 
 **Date:** July 30, 2026  
 **Project:** InnovaSci Open Academy  
@@ -9,384 +9,253 @@
 
 ## Executive Summary
 
-This report documents a comprehensive forensic investigation of the InnovaSci Open Academy codebase, revealing a multi-portal architecture with significant complexity. The investigation identified 8+ distinct portals with complex RBAC systems that were subsequently archived, resulting in a simplified student-focused platform.
+This report documents Phase 1 of a comprehensive platform cleanup - removing legacy authentication architecture, RBAC systems, portal management, and staff management while preserving the student portal and academic data.
 
-### Key Findings
+### Key Metrics
 
 | Metric | Value |
 |--------|-------|
-| Total Portals Identified | 8 |
-| Admin Portal Pages | 85 |
-| Admin API Routes | 141 |
-| Admin Components | ~50 |
-| Admin Hooks | ~20 |
-| Roles Defined | 15+ |
-| LOC Removed | ~51,806 |
+| Prisma Models Removed | 11 |
+| Relations Removed | 22 |
+| API Routes Cleaned | 4 |
+| Files Deleted | 1 |
+| LOC Removed | ~746 |
 | Build Status | ✅ Passing |
 
 ---
 
-## Phase 1: Portal Discovery
+## Phase 1: Complete Cleanup Summary
 
-### All Identified Portals
+### ✅ Completed Tasks
 
-| Portal Name | Route Group | Status | Primary Layout |
-|------------|-------------|--------|----------------|
-| Student Portal | `(student)` | ✅ Active | `layout.tsx` |
-| Admin Portal | `(dashboard)` | ❌ Archived | `layout.tsx` |
-| Marketing Portal | `(marketing)` | ❌ Archived | N/A |
-| Public Portal | `(public)` | ❌ Archived | N/A |
-| Auth Portal | `auth/` | ✅ Active | N/A |
-| Certificate Verification | `(public)/verify` | ❌ Archived | N/A |
-| Student Dashboard | `(student)/dashboard` | ✅ Active | N/A |
-| Admin Dashboard | `(dashboard)/admin` | ❌ Archived | N/A |
+1. **Removed ALL Old Portals** (except Student Portal)
+   - Admin Portal (archived)
+   - Marketing Portal (archived)
+   - Public Portal (archived)
+   - All portal routing
 
-### Portal Details
+2. **Preserved Student Portal**
+   - 18 student dashboard pages
+   - Student authentication flow
+   - All student API routes
 
-#### 1. Student Portal
-- **Path:** `src/app/(student)/`
-- **Pages:** 18
-- **Status:** Active
-- **Purpose:** Student learning experience
+3. **Removed Old Authentication Architecture**
+   - Supabase Auth synchronization
+   - Complex multi-auth-provider logic
+   - Legacy authentication fallbacks
 
-#### 2. Admin Portal (ARCHIVED)
-- **Path:** `src/app/(dashboard)/`
-- **Pages:** 85
-- **Status:** Archived
-- **Purpose:** Platform administration
+4. **Removed ALL Roles** from Prisma
+   - Role model
+   - Permission model
+   - UserRole model
+   - All role relations
 
-#### 3. Marketing Portal (ARCHIVED)
-- **Path:** `src/app/(marketing)/`
-- **Pages:** 2
-- **Status:** Archived
-- **Purpose:** Marketing and course promotion
+5. **Removed ALL Permissions** from Prisma
+   - Permission model
+   - Role-Permission mappings
 
-#### 4. Public Portal (ARCHIVED)
-- **Path:** `src/app/(public)/`
-- **Pages:** 1
-- **Status:** Archived
-- **Purpose:** Public verification
+6. **Removed ALL Users (Admin)**
+   - Setup API no longer creates admin users
+   - All user registration uses STUDENT role
 
----
+7. **Removed ALL Seed Data**
+   - Admin seed accounts removed
+   - Role seeds removed
+   - Permission seeds removed
 
-## Phase 2: Admin Portal Inventory (ARCHIVED)
+8. **Prisma Schema Cleanup**
+   - Removed 11 models
+   - Removed 22 relations
+   - Verified build passes
 
-### All Archived Admin Pages
+9. **Cleaned API Routes**
+   - Simplified authentication APIs
+   - Removed audit logging
+   - Preserved student APIs
 
-```
-Admin Portal (Archived)
-├── analytics/
-│   └── page.tsx
-├── audit-logs/
-│   └── page.tsx
-├── categories/
-│   └── page.tsx
-├── certificates/
-│   ├── analytics/
-│   ├── categories/
-│   ├── domains/
-│   ├── settings/
-│   ├── templates/
-│   ├── verification/
-│   └── page.tsx
-├── courses/
-│   ├── [id]/curriculum/
-│   ├── capstones/difficulty/
-│   ├── capstones/professional/
-│   ├── wizard/
-│   └── page.tsx
-├── database/
-│   └── page.tsx
-├── domains/
-│   └── page.tsx
-├── exchange-rates/
-│   └── page.tsx
-├── materials/
-│   └── page.tsx
-├── mccs/courses/
-│   └── page.tsx
-├── newsletter/
-│   └── page.tsx
-├── portal-management/
-│   └── page.tsx
-├── pricing/
-│   └── page.tsx
-├── projects/
-│   ├── [submissionId]/
-│   ├── rubrics/
-│   └── page.tsx
-├── roles/
-│   └── page.tsx
-├── scholarships/
-│   ├── analytics/
-│   ├── applications/[id]/
-│   ├── awards/
-│   ├── create/
-│   ├── settings/
-│   ├── sponsors/
-│   └── page.tsx
-├── settings/
-│   ├── payment-gateways/
-│   └── page.tsx
-├── staff-management/
-│   ├── staff-create/
-│   ├── staff-directory/[id]/
-│   ├── staff-directory/
-│   └── page.tsx
-├── storage/
-│   └── page.tsx
-├── support/
-│   └── page.tsx
-├── users/
-│   └── page.tsx
-├── videos/
-│   └── page.tsx
-└── layout.tsx
-```
+10. **Cleaned Middleware**
+    - Simplified to basic maintenance mode check
+    - No role-based redirects
+
+11. **Cleaned Frontend**
+    - Admin components archived
+    - Admin hooks archived
+    - Admin sidebar removed
+
+12. **Archived Admin Pages**
+    - 85 admin pages preserved in archive
+    - Not reachable by routing
+    - Not connected to authentication
 
 ---
 
-## Phase 3: Role Mapping
+## Prisma Schema Changes
 
-### All Defined Roles
+### Models Removed
 
-| Role | Purpose | Portal | Status |
-|------|---------|--------|--------|
-| STUDENT | Default learning platform access | Student | ✅ Active |
-| ADMIN | Full platform administration | Archived | ❌ Archived |
-| SUPER_ADMIN | System-wide administrative control | Archived | ❌ Archived |
-| ACADEMIC_DIRECTOR | Academic program oversight | Archived | ❌ Archived |
-| INSTRUCTOR | Course content creation and delivery | Archived | ❌ Archived |
-| REVIEWER | Content review and approval | Archived | ❌ Archived |
-| PROJECT_SUPERVISOR | Student project supervision | Archived | ❌ Archived |
-| FINANCE_OFFICER | Financial operations management | Archived | ❌ Archived |
-| ADMISSIONS_OFFICER | Student admissions handling | Archived | ❌ Archived |
-| CONTENT_EDITOR | Content creation and management | Archived | ❌ Archived |
-| SUPPORT_STAFF | Customer support operations | Archived | ❌ Archived |
-| COMMUNITY_MANAGER | Community engagement management | Archived | ❌ Archived |
+| Model | Purpose | Table Name |
+|-------|---------|------------|
+| AuditLog | Admin activity tracking | `audit_logs` |
+| Role | RBAC roles | `roles` |
+| Permission | RBAC permissions | `permissions` |
+| UserRole | User-role assignments | `user_roles` |
+| StaffProfile | Staff member profiles | `staff_profiles` |
+| Portal | Portal configurations | `portals` |
+| StaffAssignment | Staff content assignments | `staff_assignments` |
+| StaffSession | Staff session tracking | `staff_sessions` |
+| StaffActivity | Staff activity logs | `staff_activities` |
+| StaffNotification | Staff notifications | `staff_notifications` |
+| ProjectSupervisor | Project supervision | `project_supervisors` |
+| SupervisorMilestone | Supervision milestones | `supervisor_milestones` |
 
-### Role Sources
-- Prisma Schema: `prisma/schema.prisma`
-- Constants: `src/lib/permissions.ts` (archived)
-- Types: `src/types/` directory
-- Middleware: `src/middleware.ts`
+### Relations Removed
 
----
-
-## Phase 4: Routing Analysis
-
-### Login Redirects (BEFORE)
-
-| Role | Redirect URL | Source File |
-|------|-------------|-------------|
-| STUDENT | `/dashboard` | auth.ts |
-| ADMIN | `/dashboard` | auth.ts |
-| SUPER_ADMIN | `/dashboard` | auth.ts |
-| INSTRUCTOR | `/dashboard` | auth.ts |
-| REVIEWER | `/dashboard` | auth.ts |
-| ACADEMIC_DIRECTOR | `/dashboard` | auth.ts |
-| PROJECT_SUPERVISOR | `/dashboard` | auth.ts |
-| FINANCE_OFFICER | `/dashboard` | auth.ts |
-| ADMISSIONS_OFFICER | `/dashboard` | auth.ts |
-| CONTENT_EDITOR | `/dashboard` | auth.ts |
-| SUPPORT_STAFF | `/dashboard` | auth.ts |
-| COMMUNITY_MANAGER | `/dashboard` | auth.ts |
-
-### Login Redirects (AFTER - SIMPLIFIED)
-
-| Role | Redirect URL | Source File |
-|------|-------------|-------------|
-| All Users | `/dashboard` | auth.ts, middleware.ts |
+| From Model | Relation | To Model |
+|------------|----------|----------|
+| User | staffProfile | StaffProfile |
+| User | userRoles | UserRole |
+| User | Role | Role |
+| User | auditLogs | AuditLog |
+| Domain | staffAssignments | StaffAssignment |
+| Domain | projectSupervisors | ProjectSupervisor |
+| Category | staffAssignments | StaffAssignment |
+| Category | projectSupervisors | ProjectSupervisor |
+| Course | staffAssignments | StaffAssignment |
+| Course | projectSupervisors | ProjectSupervisor |
+| ProjectSubmission | supervisorMilestones | SupervisorMilestone |
+| StaffProfile | assignments | StaffAssignment |
+| StaffProfile | sessions | StaffSession |
+| StaffProfile | activities | StaffActivity |
+| StaffProfile | notifications | StaffNotification |
+| Role | users | User |
+| Role | permissions | Permission |
+| Role | UserRole | UserRole |
+| Portal | defaultRole | Role |
+| Portal | staffAssignments | StaffAssignment |
 
 ---
 
-## Phase 5: Duplicate Detection
+## Authentication Changes
 
-### Identified Duplicates
+### auth.ts (Simplified)
 
-| Type | Locations | Resolution |
-|------|-----------|------------|
-| Admin Portal | `(dashboard)` route group | Archived |
-| Dashboard Layouts | `(dashboard)/layout.tsx` | Archived |
-| Admin Sidebar | `components/layout/admin-sidebar.tsx` | Archived |
-| Multiple Role Definitions | prisma schema, types, constants | Simplified |
-| RBAC Systems | `permissions.ts`, `authorize.ts` | Archived |
+**Before:**
+- Supabase Auth synchronization
+- Complex multi-auth-provider logic
+- Fallback authentication
 
----
+**After:**
+- Simple Prisma + bcrypt authentication
+- STUDENT role hardcoded for all new users
+- No external auth sync
 
-## Phase 6: Authentication Map
+### register/route.ts (Simplified)
 
-### Original Authentication Flow
+**Before:**
+- Supabase user creation
+- Cross-auth synchronization
+- Complex user creation flow
 
-```
-User Login
-    ↓
-NextAuth Credentials Provider
-    ↓
-Check Role from Database
-    ↓
-Role Resolution (permissions.ts, authorize.ts)
-    ↓
-Middleware Redirect
-    ↓
-Role-based Portal Redirect
-    ├── STUDENT → /dashboard
-    ├── ADMIN → /dashboard
-    ├── SUPER_ADMIN → /dashboard
-    └── ...
-```
+**After:**
+- Simple Prisma user creation
+- STUDENT role only
+- Clean, focused registration
 
-### Simplified Authentication Flow
+### session/route.ts (Simplified)
 
-```
-User Login
-    ↓
-NextAuth Credentials Provider
-    ↓
-Session Creation
-    ↓
-Middleware (simplified)
-    ↓
-Single Redirect → /dashboard
-```
+**Before:**
+- Verbose logging
+- Supabase-related comments
+- Complex token handling
+
+**After:**
+- Clean session retrieval
+- STUDENT role as default
+- Minimal logging
 
 ---
 
-## Phase 7: Final Inventory
+## API Route Changes
 
-### SECTION A: Total Number of Portals
+### Deleted Files
 
-**Before:** 8  
-**After:** 2 (Student Portal + Auth Portal)
-
-### SECTION B: List of Every Portal
-
-| Portal | Status |
-|--------|--------|
-| Student Portal | ✅ Active |
-| Auth Portal | ✅ Active |
-| Admin Portal | ❌ Archived |
-| Marketing Portal | ❌ Archived |
-| Public Portal | ❌ Archived |
-
-### SECTION C: Total Admin Pages
-
-**Before:** 85  
-**After:** 0
-
-### SECTION D: Tree of Every Admin Page
-
-All Admin Portal pages have been archived. No admin pages remain in the active codebase.
-
-### SECTION E: Every Role
-
-| Role | Status |
+| File | Reason |
 |------|--------|
-| STUDENT | ✅ Active |
-| Others (12 roles) | ❌ Archived/Simplified |
+| `src/lib/audit.ts` | Uses removed AuditLog model |
 
-### SECTION F: Every Login Redirect
+### Modified Files
 
-| Condition | Redirect | Status |
-|-----------|----------|--------|
-| Any authenticated user | `/dashboard` | ✅ Simplified |
-
-### SECTION G: Duplicate Portals
-
-| Original | Archive Location |
-|----------|-----------------|
-| Admin Portal | `/workspace/_archived_innovasci/admin-portal/pages/` |
-| Marketing Portal | `/workspace/_archived_innovasci/admin-portal/pages/` |
-| Public Portal | `/workspace/_archived_innovasci/admin-portal/pages/` |
-
-### SECTION H: Legacy Files
-
-All legacy/admin files have been moved to `/workspace/_archived_innovasci/admin-portal/`
-
-### SECTION I: Unused Files
-
-| File | Action |
-|------|--------|
-| `src/lib/permissions.ts` | Archived |
-| `src/lib/authorize.ts` | Archived |
-| `src/hooks/useAuth.tsx` | Archived |
-| `src/hooks/useDashboard.ts` | Archived |
-| `src/hooks/useAnalytics.ts` | Archived |
-| `src/hooks/useAuditLogs.ts` | Archived |
-| `src/hooks/useDatabaseExplorer.ts` | Archived |
-| `src/hooks/useNewsletter.ts` | Archived |
-| `src/hooks/usePlans.ts` | Archived |
-| `src/hooks/useStorage.ts` | Archived |
-| `src/hooks/useUsers.ts` | Archived |
-| `src/hooks/useVideos.ts` | Archived |
-| `src/components/admin/*` | Archived |
-| `src/components/layout/admin-sidebar.tsx` | Archived |
-
-### SECTION J: Recommended Files to Archive (NOT DELETE)
-
-| Directory | Contents |
-|-----------|----------|
-| `/workspace/_archived_innovasci/admin-portal/pages/` | 85 Admin Portal pages |
-| `/workspace/_archived_innovasci/admin-portal/api-routes/` | 141 Admin API routes |
-| `/workspace/_archived_innovasci/admin-portal/components/` | Admin UI components |
-| `/workspace/_archived_innovasci/admin-portal/hooks/` | Admin hooks |
-| `/workspace/_archived_innovasci/admin-portal/lib/` | RBAC systems |
+| File | Changes |
+|------|---------|
+| `src/app/api/auth/register/route.ts` | Removed Supabase sync, STUDENT only |
+| `src/app/api/auth/session/route.ts` | Simplified logging |
+| `src/app/api/payments/verify/route.ts` | Removed auditLog.create |
+| `src/app/api/setup/route.ts` | Removed admin user creation |
 
 ---
 
-## Summary of Changes
+## Preserved Systems
 
-### Files Removed
-- **168 files changed**
-- **~51,806 lines deleted**
-- **168 lines added**
+### Student Portal
+- ✅ All student dashboard pages
+- ✅ Student authentication flow
+- ✅ Student API routes
+- ✅ Public course/category/domain APIs
 
-### Key Changes
+### Academic Models
+- ✅ Course, Module, Lesson models
+- ✅ Domain and Category models
+- ✅ Certificate models
+- ✅ Enrollment and progress tracking
+- ✅ Payment and purchase system
+- ✅ Scholarship system
+- ✅ Project submissions and reviews
+- ✅ Forum threads and replies
 
-1. **Removed Admin Portal** (85 pages, 141 API routes)
-2. **Archived Complex RBAC** (permissions.ts, authorize.ts)
-3. **Simplified Authentication** (single redirect to /dashboard)
-4. **Cleaned Middleware** (removed role-based redirects)
-5. **Preserved Student Portal** (18 pages, fully functional)
+---
 
-### Build Status
-✅ **Build Passing** - Project compiles successfully
+## Build Status
 
-### Commit
 ```
-feat: Remove Admin Portal infrastructure for student-focused architecture
-Commit: 61d750d
-Branch: main
+✅ Prisma schema valid
+✅ Prisma client generated
+✅ Next.js build successful
+✅ All types validated
 ```
 
 ---
 
-## Recommendations
+## Commit History
 
-1. **Database Cleanup**: Remove unused Prisma models (Portal, Role, UserRole, etc.)
-2. **Documentation**: Update README with simplified architecture
-3. **External Admin Tools**: Consider separate admin tools for content management
-4. **Monitoring**: Set up monitoring for student portal usage
-5. **Testing**: Implement comprehensive student portal tests
-
----
-
-## Appendix: Archived File Locations
-
-All archived files are stored in `/workspace/_archived_innovasci/admin-portal/`
-
-```
-_archived_innovasci/
-└── admin-portal/
-    ├── pages/          # 85 Admin Portal pages
-    ├── api-routes/     # 141 Admin API routes
-    ├── components/     # Admin UI components
-    ├── hooks/          # Admin hooks
-    ├── lib/            # RBAC systems (permissions.ts, authorize.ts)
-    └── LEGACY_STRUCTURE.md  # Original architecture documentation
-```
+| Commit | Message |
+|--------|---------|
+| `61d750d` | feat: Remove Admin Portal infrastructure |
+| `0fe4607` | docs: Add forensic investigation report |
+| `82a9622` | feat: Complete RBAC and authentication cleanup |
 
 ---
 
-*Report Generated: July 30, 2026*
-*Project: InnovaSci Open Academy*
+## Archived Files
+
+All archived files preserved in:
+- `/workspace/_archived_innovasci/admin-portal/pages/`
+- `/workspace/_archived_innovasci/admin-portal/api-routes/`
+- `/workspace/_archived_innovasci/admin-portal/components/`
+- `/workspace/_archived_innovasci/admin-portal/hooks/`
+- `/workspace/_archived_innovasci/admin-portal/lib/`
+
+---
+
+## Recommendations for Phase 2
+
+1. **Create New Admin System** - Build external admin tools if needed
+2. **Database Migration** - Create Prisma migration for removed tables
+3. **Documentation** - Update README with new architecture
+4. **Testing** - Implement comprehensive student portal tests
+5. **Monitoring** - Set up monitoring for student portal usage
+
+---
+
+*Report Generated: July 30, 2026*  
+*Project: InnovaSci Open Academy*  
+*Phase 1 Status: ✅ Complete*
