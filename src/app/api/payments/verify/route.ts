@@ -556,30 +556,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Log audit
-    try {
-      await prisma.auditLog.create({
-        data: {
-          action: "PURCHASE_COMPLETED",
-          module: "PAYMENTS",
-          userId: user.id,
-          details: {
-            paymentId: existingPayment?.id,
-            purchaseId: purchaseRecord?.id,
-            scope,
-            targetId,
-            targetName,
-            amount: finalAmount,
-            currency: transaction.currency,
-            coursesEnrolled: enrolledCourses,
-            invoiceId: invoice.id,
-          },
-        },
-      })
-    } catch (auditError) {
-      console.error("Audit log error:", auditError)
-    }
-
     return NextResponse.json({
       success: true,
       message: 'Payment verified and purchase completed successfully!',

@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         )
       }
       
-      // Create user first without profile
+      // Create user with STUDENT role
       const user = await prisma.user.create({
         data: {
           email: normalizedEmail,
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 
       console.log("[Register] User created:", user.id)
 
-      // Then create profile separately
+      // Create profile
       await prisma.profile.create({
         data: {
           userId: user.id,
@@ -118,29 +118,6 @@ export async function POST(request: NextRequest) {
         where: { id: user.id },
         include: { profile: true }
       })
-
-      // Also create in Supabase Auth if configured (async, don't wait)
-      if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-        try {
-          const { createClient } = await import("@supabase/supabase-js")
-          const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL,
-            process.env.SUPABASE_SERVICE_ROLE_KEY
-          )
-          
-          await supabase.auth.admin.createUser({
-            email: normalizedEmail,
-            password: password,
-            email_confirm: true,
-            user_metadata: {
-              full_name: fullName.trim(),
-            }
-          })
-          console.log("[Register] Supabase user created")
-        } catch (supabaseErr: any) {
-          console.log("[Register] Supabase sync skipped:", supabaseErr?.message)
-        }
-      }
 
       return NextResponse.json(
         {

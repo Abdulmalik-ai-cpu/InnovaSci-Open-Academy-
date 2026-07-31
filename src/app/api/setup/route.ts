@@ -1,78 +1,66 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import bcrypt from "bcryptjs"
 
-// Admin configuration from environment variables
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@innovasci.com"
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
-
-// System Admin UUID - MUST use this exact ID
-const SYSTEM_ADMIN_ID = "d2b7ac6d-0e84-4be7-89bd-4f93b15a2b51"
-
-// POST /api/setup - Seed database (assumes tables exist)
+// POST /api/setup - Seed database with sample academic content (no admin user)
+// This endpoint creates sample categories and courses for demonstration purposes
 export async function POST() {
   try {
-    // Validate admin credentials are configured
-    if (!ADMIN_PASSWORD) {
-      return NextResponse.json({
-        success: false,
-        error: "ADMIN_PASSWORD environment variable is not set. Please configure it in your .env file."
-      }, { status: 500 })
+    console.log("Starting database setup...")
+
+    // Find or create Domains
+    let domainTech = await prisma.domain.findFirst({
+      where: { slug: "technology" }
+    })
+    if (!domainTech) {
+      domainTech = await prisma.domain.create({
+        data: { 
+          name: "Technology", 
+          slug: "technology",
+          shortDescription: "Technology and software development courses"
+        }
+      })
     }
 
-    console.log("Starting database setup...")
-    
-    // Hash the admin password
-    const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 12)
-    
+    let domainBusiness = await prisma.domain.findFirst({
+      where: { slug: "business" }
+    })
+    if (!domainBusiness) {
+      domainBusiness = await prisma.domain.create({
+        data: { 
+          name: "Business", 
+          slug: "business",
+          shortDescription: "Business and entrepreneurship courses"
+        }
+      })
+    }
+
     // Find or create Categories
     let catDataScience = await prisma.category.findFirst({
-      where: { slug: "data-science", domainId: null }
+      where: { slug: "data-science", domainId: domainTech.id }
     })
     if (!catDataScience) {
       catDataScience = await prisma.category.create({
-        data: { name: "Data Science", slug: "data-science", domainId: null }
+        data: { name: "Data Science", slug: "data-science", domainId: domainTech.id }
       })
     }
     
     let catWebDev = await prisma.category.findFirst({
-      where: { slug: "web-development", domainId: null }
+      where: { slug: "web-development", domainId: domainTech.id }
     })
     if (!catWebDev) {
       catWebDev = await prisma.category.create({
-        data: { name: "Web Development", slug: "web-development", domainId: null }
+        data: { name: "Web Development", slug: "web-development", domainId: domainTech.id }
       })
     }
     
     let catMobileDev = await prisma.category.findFirst({
-      where: { slug: "mobile-development", domainId: null }
+      where: { slug: "mobile-development", domainId: domainTech.id }
     })
     if (!catMobileDev) {
       catMobileDev = await prisma.category.create({
-        data: { name: "Mobile Development", slug: "mobile-development", domainId: null }
+        data: { name: "Mobile Development", slug: "mobile-development", domainId: domainTech.id }
       })
     }
-    
-    // Create Admin User with secure password from env
-    const admin = await prisma.user.upsert({
-      where: { email: ADMIN_EMAIL },
-      update: {},
-      create: {
-        id: SYSTEM_ADMIN_ID,
-        email: ADMIN_EMAIL,
-        passwordHash: hashedPassword,
-        role: "ADMIN",
-        status: "ACTIVE",
-        profile: {
-          create: {
-            fullName: "System Administrator",
-            username: "admin",
-          }
-        }
-      },
-      include: { profile: true }
-    })
-    console.log("✓ Admin user:", admin.email)
 
     // Initialize System Settings
     await prisma.systemSetting.upsert({
@@ -205,8 +193,7 @@ export async function POST() {
 
     return NextResponse.json({
       success: true,
-      message: "Setup completed successfully!",
-      adminEmail: ADMIN_EMAIL
+      message: "Setup completed successfully! Sample academic content created."
     })
 
   } catch (error: unknown) {
@@ -236,7 +223,7 @@ export async function GET() {
         courses: courseCount,
         enrollments: enrollmentCount
       },
-      needsSetup: userCount === 0
+      needsSetup: courseCount === 0
     })
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error)
