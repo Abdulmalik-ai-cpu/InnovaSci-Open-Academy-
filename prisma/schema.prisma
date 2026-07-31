@@ -60,9 +60,6 @@ model User {
   reviewAssignments  ReviewerAssignment[]
   commentsAuthored  ProjectComment[]
 
-  // Governance Relations - Staff profile for governance roles
-  staffProfile StaffProfile?
-
   @@map("users")
 }
 
@@ -142,17 +139,11 @@ model Domain {
   
   // Scholarship Relations
   scholarshipDomains ScholarshipDomain[]
-  
-  // Governance Relations - Head of Domain
-  headOfDomain    StaffProfile? @relation("DomainHead", fields: [headOfDomainId], references: [id])
-  headOfDomainId  String?
-  headAssignments DomainAssignment[]
 
   @@index([slug])
   @@index([status])
   @@index([visibility])
   @@index([isFeatured])
-  @@index([headOfDomainId])
   @@map("domains")
 }
 
@@ -191,9 +182,6 @@ model Category {
 
   // Scholarship Relations
   scholarshipCategories ScholarshipCategory[]
-  
-  // Governance Relations
-  categoryAssignments CategoryAssignment[]
 
   @@unique([domainId, slug])
   @@unique([domainId, name])
@@ -270,9 +258,6 @@ model Course {
   versions             CourseVersion[]
   miniProjects         MiniProject[]
   projectSubmissions   ProjectSubmission[]
-  
-  // Governance Relations
-  courseAssignments CourseAssignment[]
 
   @@map("courses")
 }
@@ -2234,10 +2219,6 @@ model ProjectSubmission {
   // MCCS Link
   isFromMCCS      Boolean  @default(false) // Was this imported from MCCS
   
-  // Governance - Capstone Supervisor
-  supervisorId    String?
-  supervisor      StaffProfile? @relation("ProjectSupervisor", fields: [supervisorId], references: [id], onDelete: SetNull)
-  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -2636,177 +2617,6 @@ enum ReviewStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
-}
-
-// ============================================
-// GOVERNANCE HIERARCHY MODELS
-// InnovaSci Open Academy Authority Structure:
-// CEO/Founder
-//     │
-// Super Administrator
-//     │
-// System Administrator
-//     │
-// Academic Director
-//     │
-// Head of Domain
-//     │
-// Category Lead
-//     │
-// Instructor
-//     │
-// Student
-// ============================================
-
-// ============================================
-// STAFF PROFILE - Extended profile for governance roles
-// ============================================
-model StaffProfile {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  // Role in governance hierarchy
-  governanceRole  String   // SUPER_ADMIN, SYSTEM_ADMIN, ACADEMIC_DIRECTOR, HEAD_OF_DOMAIN, CATEGORY_LEAD, INSTRUCTOR
-  
-  // Professional Information
-  staffId         String?  // Internal staff ID
-  title           String?  // Job title
-  department      String?  // Department
-  
-  // Contact Information
-  phone           String?
-  address         String?
-  city            String?
-  country         String?
-  
-  // Employment Details
-  hireDate       DateTime?
-  terminationDate DateTime?
-  
-  // Profile Photo
-  staffAvatarUrl  String?
-  
-  // Status
-  isActive        Boolean  @default(true)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
-  // Relations - Governance Assignments
-  domainAssignments   DomainAssignment[]
-  categoryAssignments CategoryAssignment[]
-  courseAssignments   CourseAssignment[]
-  
-  // Supervisor relationships for capstone workflow
-  supervisedProjects  ProjectSubmission[] @relation("ProjectSupervisor")
-  
-  // Relation for domains led (opposite of Domain.headOfDomain)
-  domainsLed     Domain[] @relation("DomainHead")
-  
-  @@index([userId])
-  @@index([governanceRole])
-  @@index([isActive])
-  @@map("staff_profiles")
-}
-
-// ============================================
-// DOMAIN ASSIGNMENT - Head of Domain assignments
-// ============================================
-model DomainAssignment {
-  id              String   @id @default(uuid())
-  staffProfileId  String
-  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
-  
-  // Domain Reference
-  domainId        String
-  domain          Domain   @relation(fields: [domainId], references: [id], onDelete: Cascade)
-  
-  // Assignment Details
-  isPrimary       Boolean   @default(true)
-  assignedAt      DateTime  @default(now())
-  assignedBy      String?   // userId of super admin who made assignment
-  expiresAt       DateTime?
-  
-  // Status
-  status          String    @default("ACTIVE") // ACTIVE, INACTIVE, EXPIRED
-  
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
-  @@unique([staffProfileId, domainId])
-  @@index([staffProfileId])
-  @@index([domainId])
-  @@index([status])
-  @@map("domain_assignments")
-}
-
-// ============================================
-// CATEGORY ASSIGNMENT - Category Lead assignments
-// ============================================
-model CategoryAssignment {
-  id              String   @id @default(uuid())
-  staffProfileId  String
-  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
-  
-  // Category Reference
-  categoryId      String
-  category        Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  
-  // Assignment Details
-  isPrimary       Boolean   @default(true)
-  assignedAt      DateTime  @default(now())
-  assignedBy      String?   // userId of head of domain or super admin
-  expiresAt       DateTime?
-  
-  // Status
-  status          String    @default("ACTIVE") // ACTIVE, INACTIVE, EXPIRED
-  
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
-  @@unique([staffProfileId, categoryId])
-  @@index([staffProfileId])
-  @@index([categoryId])
-  @@index([status])
-  @@map("category_assignments")
-}
-
-// ============================================
-// COURSE ASSIGNMENT - Instructor assignments
-// ============================================
-model CourseAssignment {
-  id              String   @id @default(uuid())
-  staffProfileId  String
-  staffProfile    StaffProfile @relation(fields: [staffProfileId], references: [id], onDelete: Cascade)
-  
-  // Course Reference
-  courseId        String
-  course          Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  
-  // Assignment Details
-  role            String   @default("INSTRUCTOR") // INSTRUCTOR, TEACHING_ASSISTANT, GUEST_LECTURER
-  isPrimary       Boolean  @default(true)
-  assignedAt      DateTime @default(now())
-  assignedBy      String?   // userId of category lead or super admin
-  expiresAt       DateTime?
-  
-  // Permissions within course
-  canGrade        Boolean  @default(true)
-  canManageContent Boolean @default(true)
-  canViewAnalytics Boolean  @default(true)
-  
-  // Status
-  status          String    @default("ACTIVE") // ACTIVE, INACTIVE, EXPIRED
-  
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
-  @@unique([staffProfileId, courseId])
-  @@index([staffProfileId])
-  @@index([courseId])
-  @@index([status])
-  @@map("course_assignments")
 }
 
 // ============================================

@@ -2,7 +2,6 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
-import { Role } from "@/lib/rbac/roles"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -23,25 +22,17 @@ export const authOptions: NextAuthOptions = {
         try {
           const prismaUser = await prisma.user.findFirst({
             where: { email: normalizedEmail },
-            include: { 
-              profile: true,
-              staffProfile: true 
-            }
+            include: { profile: true }
           })
 
           if (prismaUser && prismaUser.passwordHash) {
             const isValid = await bcrypt.compare(credentials.password, prismaUser.passwordHash)
             if (isValid) {
-              // Determine effective role (governance role takes precedence)
-              const effectiveRole = prismaUser.staffProfile?.governanceRole || prismaUser.role
-              
               return {
                 id: prismaUser.id,
                 email: prismaUser.email,
                 name: prismaUser.profile?.fullName || prismaUser.email.split("@")[0],
-                role: effectiveRole,
-                isGovernanceStaff: !!prismaUser.staffProfile,
-                governanceRole: prismaUser.staffProfile?.governanceRole || null,
+                role: prismaUser.role
               }
             }
           }
@@ -58,8 +49,6 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.role = (user as any).role || "STUDENT"
-        token.isGovernanceStaff = (user as any).isGovernanceStaff || false
-        token.governanceRole = (user as any).governanceRole || null
       }
       return token
     },
@@ -67,8 +56,6 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
-        ;(session.user as any).isGovernanceStaff = token.isGovernanceStaff || false
-        ;(session.user as any).governanceRole = token.governanceRole || null
       }
       return session
     }
@@ -80,18 +67,4 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt"
   },
   secret: process.env.NEXTAUTH_SECRET
-}
-
-// Extend the built-in types
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string
-      email: string
-      name?: string | null
-      role: string
-      isGovernanceStaff?: boolean
-      governanceRole?: string | null
-    }
-  }
 }

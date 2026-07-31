@@ -60,7 +60,7 @@ export function Header() {
   const isAuthenticated = status === "authenticated" && !!session?.user
   const userName = session?.user?.name || session?.user?.email?.split("@")[0] || "User"
   const userEmail = session?.user?.email || ""
-  const userAvatar = undefined
+  const userAvatar = session?.user?.image || undefined
 
   // Handle mounting for theme to avoid hydration mismatch
   useEffect(() => {
