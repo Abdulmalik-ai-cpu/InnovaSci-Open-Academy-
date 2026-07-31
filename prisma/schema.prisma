@@ -60,6 +60,14 @@ model User {
   reviewAssignments  ReviewerAssignment[]
   commentsAuthored  ProjectComment[]
 
+  // RBAC Relations
+  userRoles        UserRole[]
+  portalAssignment PortalAssignment?
+  userPolicies     UserPolicy[]
+  domainAssignments   DomainAssignment[]
+  categoryAssignments CategoryAssignment[]
+  courseAssignments   CourseAssignment[]
+
   @@map("users")
 }
 
@@ -140,6 +148,9 @@ model Domain {
   // Scholarship Relations
   scholarshipDomains ScholarshipDomain[]
 
+  // RBAC Relations
+  domainAssignments DomainAssignment[]
+
   @@index([slug])
   @@index([status])
   @@index([visibility])
@@ -182,6 +193,9 @@ model Category {
 
   // Scholarship Relations
   scholarshipCategories ScholarshipCategory[]
+
+  // RBAC Relations
+  categoryAssignments CategoryAssignment[]
 
   @@unique([domainId, slug])
   @@unique([domainId, name])
@@ -258,6 +272,9 @@ model Course {
   versions             CourseVersion[]
   miniProjects         MiniProject[]
   projectSubmissions   ProjectSubmission[]
+
+  // RBAC Relations
+  courseAssignments   CourseAssignment[]
 
   @@map("courses")
 }
@@ -3347,6 +3364,215 @@ model ScholarshipScoringRubric {
   updatedAt       DateTime @updatedAt
   
   @@map("scholarship_scoring_rubrics")
+}
+
+// ============================================
+// RBAC - ROLES - Role definitions for the platform
+// ============================================
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique // SUPER_ADMIN, SYSTEM_ADMIN, ACADEMIC_DIRECTOR, HEAD_OF_DOMAIN, CATEGORY_LEAD, INSTRUCTOR, STUDENT
+  displayName String
+  description String?
+  level       Int      @default(0) // Hierarchy level (higher = more authority)
+  portal      String   // INSTRUCTOR, ACADEMIC, ADMINISTRATION, STUDENT
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  permissions RolePermission[]
+  users      UserRole[]
+
+  @@map("roles")
+}
+
+// ============================================
+// RBAC - PERMISSIONS - Granular permissions
+// ============================================
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g., DOMAINS_VIEW, COURSES_CREATE
+  category    String   // e.g., DOMAINS, COURSES, USERS, SYSTEM
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+// ============================================
+// RBAC - ROLE PERMISSIONS - Many-to-many relationship
+// ============================================
+model RolePermission {
+  id           String   @id @default(uuid())
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+
+  // Relations
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// ============================================
+// RBAC - USER ROLES - User to Role mapping
+// ============================================
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String
+  roleId    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_roles")
+}
+
+// ============================================
+// PBAC - POLICIES - Policy definitions
+// ============================================
+model Policy {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g., DOMAIN_SCOPE, CATEGORY_SCOPE
+  description String?
+  type        String   // DOMAIN, CATEGORY, COURSE, USER
+  rules       Json     // Policy rules in JSON format
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  rules_ PolicyRule[]
+  userPolicies UserPolicy[]
+
+  @@map("policies")
+}
+
+// ============================================
+// PBAC - POLICY RULES - Specific rules for policies
+// ============================================
+model PolicyRule {
+  id          String   @id @default(uuid())
+  policyId    String
+  ruleType    String   // SCOPE, CONDITION, CONSTRAINT
+  field       String   // e.g., domainId, categoryId
+  operator    String   // EQUALS, IN, NOT_IN
+  value       Json     // The value to compare against
+  createdAt   DateTime @default(now())
+
+  // Relations
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@map("policy_rules")
+}
+
+// ============================================
+// PBAC - USER POLICIES - User to Policy mapping
+// ============================================
+model UserPolicy {
+  id        String   @id @default(uuid())
+  userId    String
+  policyId  String
+  scopeId   String?  // The specific scope (domainId, categoryId, courseId)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, policyId, scopeId])
+  @@map("user_policies")
+}
+
+// ============================================
+// PORTAL ASSIGNMENTS - Track which portal a user belongs to
+// ============================================
+model PortalAssignment {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  portal    String   // INSTRUCTOR, ACADEMIC, ADMINISTRATION, STUDENT
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("portal_assignments")
+}
+
+// ============================================
+// DOMAIN ASSIGNMENTS - Head of Domain assignments
+// ============================================
+model DomainAssignment {
+  id          String   @id @default(uuid())
+  userId      String
+  domainId    String
+  role        String   @default("HEAD_OF_DOMAIN")
+  status      String   @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  domain Domain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, domainId])
+  @@map("domain_assignments")
+}
+
+// ============================================
+// CATEGORY ASSIGNMENTS - Category Lead assignments
+// ============================================
+model CategoryAssignment {
+  id          String   @id @default(uuid())
+  userId      String
+  categoryId  String
+  role        String   @default("CATEGORY_LEAD")
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId])
+  @@map("category_assignments")
+}
+
+// ============================================
+// COURSE ASSIGNMENTS - Instructor course assignments
+// ============================================
+model CourseAssignment {
+  id          String   @id @default(uuid())
+  userId      String
+  courseId    String
+  role        String   @default("INSTRUCTOR")
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("course_assignments")
 }
 
 
