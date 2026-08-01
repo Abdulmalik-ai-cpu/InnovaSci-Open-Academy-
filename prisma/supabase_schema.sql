@@ -562,7 +562,7 @@ CREATE TABLE IF NOT EXISTS "profiles" (
     "preferredGateway" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "profiles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "profiles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- PortfolioEntry -> portfolio_entries
@@ -586,7 +586,7 @@ CREATE TABLE IF NOT EXISTS "portfolio_entries" (
     "viewCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "portfolio_entries_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "portfolio_entries_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- SupportTicket -> support_tickets
@@ -642,7 +642,7 @@ CREATE TABLE IF NOT EXISTS "certificate_progress" (
     "lastActivityAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "certificate_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "certificate_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- Notification -> notifications
@@ -655,7 +655,7 @@ CREATE TABLE IF NOT EXISTS "notifications" (
     "read" BOOLEAN NOT NULL DEFAULT FALSE,
     "data" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- AccessLicense -> access_licenses
@@ -676,7 +676,7 @@ CREATE TABLE IF NOT EXISTS "access_licenses" (
     "lastEnrolledAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "access_licenses_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "access_licenses_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- CertificateEligibility -> certificate_eligibility
@@ -693,7 +693,7 @@ CREATE TABLE IF NOT EXISTS "certificate_eligibility" (
     "notifiedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "certificate_eligibility_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "certificate_eligibility_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- ForumThread -> forum_threads
@@ -711,7 +711,7 @@ CREATE TABLE IF NOT EXISTS "forum_threads" (
     "lastReplyAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "forum_threads_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "forum_threads_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id")
 );
 
 -- PortalAssignment -> portal_assignments
@@ -721,7 +721,7 @@ CREATE TABLE IF NOT EXISTS "portal_assignments" (
     "portal" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "portal_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "portal_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- Invoice -> invoices
@@ -747,7 +747,7 @@ CREATE TABLE IF NOT EXISTS "invoices" (
     "terms" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- Payment -> payments
@@ -778,7 +778,7 @@ CREATE TABLE IF NOT EXISTS "payments" (
     "refundedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "payments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "payments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
 -- DomainCertificate -> domain_certificates
@@ -793,7 +793,7 @@ CREATE TABLE IF NOT EXISTS "domain_certificates" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "domain_certificates_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id") NOT NULL
+    CONSTRAINT "domain_certificates_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id")
 );
 
 -- Category -> categories
@@ -828,8 +828,8 @@ CREATE TABLE IF NOT EXISTS "domain_assignments" (
     "status" TEXT NOT NULL DEFAULT "ACTIVE",
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "domain_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "domain_assignments_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id") NOT NULL
+    CONSTRAINT "domain_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "domain_assignments_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id")
 );
 
 -- AcademyPurchase -> academy_purchases
@@ -852,7 +852,7 @@ CREATE TABLE IF NOT EXISTS "academy_purchases" (
     "paystackRef" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "academy_purchases_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "academy_purchases_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
     CONSTRAINT "academy_purchases_planId_fkey" FOREIGN KEY ("planId") REFERENCES "plans" ("id")
 );
 
@@ -877,9 +877,9 @@ CREATE TABLE IF NOT EXISTS "domain_purchases" (
     "invoiceId" TEXT,
     "paystackRef" TEXT,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "domain_purchases_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "domain_purchases_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
     CONSTRAINT "domain_purchases_planId_fkey" FOREIGN KEY ("planId") REFERENCES "plans" ("id"),
-    CONSTRAINT "domain_purchases_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id") NOT NULL
+    CONSTRAINT "domain_purchases_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id")
 );
 
 -- Subscription -> subscriptions
@@ -898,7 +898,7 @@ CREATE TABLE IF NOT EXISTS "subscriptions" (
     "stripeSubscriptionId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "subscriptions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "subscriptions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
     CONSTRAINT "subscriptions_planId_fkey" FOREIGN KEY ("planId") REFERENCES "plans" ("id")
 );
 
@@ -914,7 +914,7 @@ CREATE TABLE IF NOT EXISTS "gateway_configurations" (
     "config" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "gateway_configurations_gatewayId_fkey" FOREIGN KEY ("gatewayId") REFERENCES "payment_gateways" ("id") NOT NULL
+    CONSTRAINT "gateway_configurations_gatewayId_fkey" FOREIGN KEY ("gatewayId") REFERENCES "payment_gateways" ("id")
 );
 
 -- PaymentTransaction -> payment_transactions
@@ -947,7 +947,7 @@ CREATE TABLE IF NOT EXISTS "payment_transactions" (
     "errorCode" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "payment_transactions_gatewayId_fkey" FOREIGN KEY ("gatewayId") REFERENCES "payment_gateways" ("id") NOT NULL
+    CONSTRAINT "payment_transactions_gatewayId_fkey" FOREIGN KEY ("gatewayId") REFERENCES "payment_gateways" ("id")
 );
 
 -- PaymentGatewayLog -> payment_gateway_logs
@@ -967,7 +967,7 @@ CREATE TABLE IF NOT EXISTS "payment_gateway_logs" (
     "errorStack" TEXT,
     "ipAddress" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "payment_gateway_logs_gatewayId_fkey" FOREIGN KEY ("gatewayId") REFERENCES "payment_gateways" ("id") NOT NULL
+    CONSTRAINT "payment_gateway_logs_gatewayId_fkey" FOREIGN KEY ("gatewayId") REFERENCES "payment_gateways" ("id")
 );
 
 -- DiscountCampaign -> discount_campaigns
@@ -1008,8 +1008,8 @@ CREATE TABLE IF NOT EXISTS "learning_path_progress" (
     "enrolledAt" TIMESTAMP(3) NOT NULL,
     "completedAt" TIMESTAMP(3),
     "progressPercent" INTEGER NOT NULL DEFAULT 0,
-    CONSTRAINT "learning_path_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "learning_path_progress_learningPathId_fkey" FOREIGN KEY ("learningPathId") REFERENCES "learning_paths" ("id") NOT NULL
+    CONSTRAINT "learning_path_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "learning_path_progress_learningPathId_fkey" FOREIGN KEY ("learningPathId") REFERENCES "learning_paths" ("id")
 );
 
 -- CapstoneEnrollment -> capstone_enrollments
@@ -1026,7 +1026,7 @@ CREATE TABLE IF NOT EXISTS "capstone_enrollments" (
     "certificateId" TEXT,
     "enrolledAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "capstone_enrollments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "capstone_enrollments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
     CONSTRAINT "capstone_enrollments_difficultyCapstoneId_fkey" FOREIGN KEY ("difficultyCapstoneId") REFERENCES "difficulty_level_caps" ("id"),
     CONSTRAINT "capstone_enrollments_professionalCapstoneId_fkey" FOREIGN KEY ("professionalCapstoneId") REFERENCES "professional_caps" ("id")
 );
@@ -1048,7 +1048,7 @@ CREATE TABLE IF NOT EXISTS "sponsor_students" (
     "lastReportDate" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "sponsor_students_sponsorId_fkey" FOREIGN KEY ("sponsorId") REFERENCES "sponsors" ("id") NOT NULL
+    CONSTRAINT "sponsor_students_sponsorId_fkey" FOREIGN KEY ("sponsorId") REFERENCES "sponsors" ("id")
 );
 
 -- Scholarship -> scholarships
@@ -1113,7 +1113,7 @@ CREATE TABLE IF NOT EXISTS "sponsor_reports" (
     "periodStart" TIMESTAMP(3),
     "periodEnd" TIMESTAMP(3),
     "sentAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "sponsor_reports_sponsorId_fkey" FOREIGN KEY ("sponsorId") REFERENCES "sponsors" ("id") NOT NULL
+    CONSTRAINT "sponsor_reports_sponsorId_fkey" FOREIGN KEY ("sponsorId") REFERENCES "sponsors" ("id")
 );
 
 -- UserRole -> user_roles
@@ -1124,8 +1124,8 @@ CREATE TABLE IF NOT EXISTS "user_roles" (
     "isActive" BOOLEAN NOT NULL DEFAULT TRUE,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles" ("id") NOT NULL
+    CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles" ("id")
 );
 
 -- RolePermission -> role_permissions
@@ -1134,8 +1134,8 @@ CREATE TABLE IF NOT EXISTS "role_permissions" (
     "roleId" TEXT NOT NULL,
     "permissionId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "role_permissions_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles" ("id") NOT NULL,
-    CONSTRAINT "role_permissions_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "permissions" ("id") NOT NULL
+    CONSTRAINT "role_permissions_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles" ("id"),
+    CONSTRAINT "role_permissions_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "permissions" ("id")
 );
 
 -- PolicyRule -> policy_rules
@@ -1147,7 +1147,7 @@ CREATE TABLE IF NOT EXISTS "policy_rules" (
     "operator" TEXT NOT NULL,
     "value" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "policy_rules_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies" ("id") NOT NULL
+    CONSTRAINT "policy_rules_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies" ("id")
 );
 
 -- UserPolicy -> user_policies
@@ -1159,8 +1159,8 @@ CREATE TABLE IF NOT EXISTS "user_policies" (
     "isActive" BOOLEAN NOT NULL DEFAULT TRUE,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "user_policies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "user_policies_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies" ("id") NOT NULL
+    CONSTRAINT "user_policies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "user_policies_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies" ("id")
 );
 
 -- TicketComment -> ticket_comments
@@ -1171,7 +1171,7 @@ CREATE TABLE IF NOT EXISTS "ticket_comments" (
     "message" TEXT NOT NULL,
     "isInternal" BOOLEAN NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "ticket_comments_ticketId_fkey" FOREIGN KEY ("ticketId") REFERENCES "support_tickets" ("id") NOT NULL,
+    CONSTRAINT "ticket_comments_ticketId_fkey" FOREIGN KEY ("ticketId") REFERENCES "support_tickets" ("id"),
     CONSTRAINT "ticket_comments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id")
 );
 
@@ -1185,8 +1185,8 @@ CREATE TABLE IF NOT EXISTS "forum_replies" (
     "isAccepted" BOOLEAN NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "forum_replies_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "forum_replies_threadId_fkey" FOREIGN KEY ("threadId") REFERENCES "forum_threads" ("id") NOT NULL
+    CONSTRAINT "forum_replies_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id"),
+    CONSTRAINT "forum_replies_threadId_fkey" FOREIGN KEY ("threadId") REFERENCES "forum_threads" ("id")
 );
 
 -- DomainIssuedCert -> domain_issued_certs
@@ -1205,8 +1205,8 @@ CREATE TABLE IF NOT EXISTS "domain_issued_certs" (
     "ceoSignature" TEXT,
     "academicDirectorSignature" TEXT,
     "status" TEXT NOT NULL DEFAULT "ACTIVE",
-    CONSTRAINT "domain_issued_certs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "domain_issued_certs_domainCertificateId_fkey" FOREIGN KEY ("domainCertificateId") REFERENCES "domain_certificates" ("id") NOT NULL
+    CONSTRAINT "domain_issued_certs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "domain_issued_certs_domainCertificateId_fkey" FOREIGN KEY ("domainCertificateId") REFERENCES "domain_certificates" ("id")
 );
 
 -- CategoryPurchase -> category_purchases
@@ -1233,9 +1233,9 @@ CREATE TABLE IF NOT EXISTS "category_purchases" (
     "paystackRef" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "category_purchases_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "category_purchases_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
     CONSTRAINT "category_purchases_planId_fkey" FOREIGN KEY ("planId") REFERENCES "plans" ("id"),
-    CONSTRAINT "category_purchases_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id") NOT NULL
+    CONSTRAINT "category_purchases_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id")
 );
 
 -- Course -> courses
@@ -1282,8 +1282,8 @@ CREATE TABLE IF NOT EXISTS "category_assignments" (
     "status" TEXT NOT NULL DEFAULT "ACTIVE",
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "category_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "category_assignments_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id") NOT NULL
+    CONSTRAINT "category_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "category_assignments_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id")
 );
 
 -- CategoryCertificate -> category_certificates
@@ -1298,7 +1298,7 @@ CREATE TABLE IF NOT EXISTS "category_certificates" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "category_certificates_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id") NOT NULL
+    CONSTRAINT "category_certificates_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id")
 );
 
 -- ScholarshipApplication -> scholarship_applications
@@ -1361,7 +1361,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_applications" (
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "submittedAt" TIMESTAMP(3),
-    CONSTRAINT "scholarship_applications_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL
+    CONSTRAINT "scholarship_applications_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id")
 );
 
 -- ScholarshipDifficulty -> scholarship_difficulties
@@ -1370,7 +1370,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_difficulties" (
     "scholarshipId" TEXT NOT NULL,
     "difficultyLevel" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_difficulties_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL
+    CONSTRAINT "scholarship_difficulties_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id")
 );
 
 -- ScholarshipCertificate -> scholarship_certificates
@@ -1379,8 +1379,8 @@ CREATE TABLE IF NOT EXISTS "scholarship_certificates" (
     "scholarshipId" TEXT NOT NULL,
     "certificateId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_certificates_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL,
-    CONSTRAINT "scholarship_certificates_certificateId_fkey" FOREIGN KEY ("certificateId") REFERENCES "certificate_templates" ("id") NOT NULL
+    CONSTRAINT "scholarship_certificates_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id"),
+    CONSTRAINT "scholarship_certificates_certificateId_fkey" FOREIGN KEY ("certificateId") REFERENCES "certificate_templates" ("id")
 );
 
 -- ScholarshipCustomQuestion -> scholarship_custom_questions
@@ -1397,7 +1397,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_custom_questions" (
     "placeholder" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_custom_questions_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL
+    CONSTRAINT "scholarship_custom_questions_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id")
 );
 
 -- ScholarshipPlan -> scholarship_plans
@@ -1407,8 +1407,8 @@ CREATE TABLE IF NOT EXISTS "scholarship_plans" (
     "planId" TEXT NOT NULL,
     "duration" INTEGER DEFAULT 365,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_plans_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL,
-    CONSTRAINT "scholarship_plans_planId_fkey" FOREIGN KEY ("planId") REFERENCES "plans" ("id") NOT NULL
+    CONSTRAINT "scholarship_plans_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id"),
+    CONSTRAINT "scholarship_plans_planId_fkey" FOREIGN KEY ("planId") REFERENCES "plans" ("id")
 );
 
 -- ScholarshipDomain -> scholarship_domains
@@ -1417,8 +1417,8 @@ CREATE TABLE IF NOT EXISTS "scholarship_domains" (
     "scholarshipId" TEXT NOT NULL,
     "domainId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_domains_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL,
-    CONSTRAINT "scholarship_domains_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id") NOT NULL
+    CONSTRAINT "scholarship_domains_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id"),
+    CONSTRAINT "scholarship_domains_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains" ("id")
 );
 
 -- ScholarshipCategory -> scholarship_categories
@@ -1427,8 +1427,8 @@ CREATE TABLE IF NOT EXISTS "scholarship_categories" (
     "scholarshipId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_categories_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL,
-    CONSTRAINT "scholarship_categories_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id") NOT NULL
+    CONSTRAINT "scholarship_categories_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id"),
+    CONSTRAINT "scholarship_categories_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories" ("id")
 );
 
 -- ScholarshipReviewer -> scholarship_reviewers
@@ -1446,7 +1446,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_reviewers" (
     "reviewedCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "scholarship_reviewers_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id") NOT NULL
+    CONSTRAINT "scholarship_reviewers_scholarshipId_fkey" FOREIGN KEY ("scholarshipId") REFERENCES "scholarships" ("id")
 );
 
 -- LearningPathCourse -> learning_path_courses
@@ -1458,8 +1458,8 @@ CREATE TABLE IF NOT EXISTS "learning_path_courses" (
     "isRequired" BOOLEAN NOT NULL DEFAULT TRUE,
     "stepTitle" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "learning_path_courses_learningPathId_fkey" FOREIGN KEY ("learningPathId") REFERENCES "learning_paths" ("id") NOT NULL,
-    CONSTRAINT "learning_path_courses_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "learning_path_courses_learningPathId_fkey" FOREIGN KEY ("learningPathId") REFERENCES "learning_paths" ("id"),
+    CONSTRAINT "learning_path_courses_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseObjective -> course_objectives
@@ -1470,7 +1470,7 @@ CREATE TABLE IF NOT EXISTS "course_objectives" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_objectives_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_objectives_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseAssignment -> course_assignments
@@ -1482,8 +1482,8 @@ CREATE TABLE IF NOT EXISTS "course_assignments" (
     "status" TEXT NOT NULL DEFAULT "ACTIVE",
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "course_assignments_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "course_assignments_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseLearningOutcome -> course_learning_outcomes
@@ -1494,7 +1494,7 @@ CREATE TABLE IF NOT EXISTS "course_learning_outcomes" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_learning_outcomes_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_learning_outcomes_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- Module -> modules
@@ -1506,7 +1506,7 @@ CREATE TABLE IF NOT EXISTS "modules" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "modules_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "modules_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseSEO -> course_seo
@@ -1521,7 +1521,7 @@ CREATE TABLE IF NOT EXISTS "course_seo" (
     "noFollow" BOOLEAN NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_seo_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_seo_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseSoftware -> course_software
@@ -1536,7 +1536,7 @@ CREATE TABLE IF NOT EXISTS "course_software" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_software_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_software_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseResource -> course_resources
@@ -1553,7 +1553,7 @@ CREATE TABLE IF NOT EXISTS "course_resources" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_resources_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_resources_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- MiniProject -> mini_projects
@@ -1574,7 +1574,7 @@ CREATE TABLE IF NOT EXISTS "mini_projects" (
     "dueDaysAfterStart" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "mini_projects_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "mini_projects_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- Certificate -> certificates
@@ -1588,8 +1588,8 @@ CREATE TABLE IF NOT EXISTS "certificates" (
     "verificationCode" TEXT NOT NULL UNIQUE,
     "issuedAt" TIMESTAMP(3) NOT NULL,
     "status" TEXT NOT NULL DEFAULT "ACTIVE",
-    CONSTRAINT "certificates_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "certificates_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "certificates_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "certificates_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseDataset -> course_datasets
@@ -1606,7 +1606,7 @@ CREATE TABLE IF NOT EXISTS "course_datasets" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_datasets_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_datasets_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- Enrollment -> enrollments
@@ -1618,8 +1618,8 @@ CREATE TABLE IF NOT EXISTS "enrollments" (
     "completed" BOOLEAN NOT NULL DEFAULT FALSE,
     "enrolledAt" TIMESTAMP(3) NOT NULL,
     "completedAt" TIMESTAMP(3),
-    CONSTRAINT "enrollments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "enrollments_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "enrollments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "enrollments_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- Prerequisite -> prerequisites
@@ -1633,7 +1633,7 @@ CREATE TABLE IF NOT EXISTS "prerequisites" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "prerequisites_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "prerequisites_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CareerOutcome -> career_outcomes
@@ -1646,7 +1646,7 @@ CREATE TABLE IF NOT EXISTS "career_outcomes" (
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "career_outcomes_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "career_outcomes_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CourseVersion -> course_versions
@@ -1657,7 +1657,7 @@ CREATE TABLE IF NOT EXISTS "course_versions" (
     "changes" TEXT,
     "createdBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "course_versions_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "course_versions_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- IssuedCertificate -> issued_certificates
@@ -1673,8 +1673,8 @@ CREATE TABLE IF NOT EXISTS "issued_certificates" (
     "issuedAt" TIMESTAMP(3) NOT NULL,
     "revokedAt" TIMESTAMP(3),
     "revokeReason" TEXT,
-    CONSTRAINT "issued_certificates_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "issued_certificates_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "issued_certificates_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "users" ("id"),
+    CONSTRAINT "issued_certificates_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- Wishlist -> wishlists
@@ -1683,8 +1683,8 @@ CREATE TABLE IF NOT EXISTS "wishlists" (
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "addedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "wishlists_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "wishlists_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL
+    CONSTRAINT "wishlists_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "wishlists_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id")
 );
 
 -- CategoryIssuedCert -> category_issued_certs
@@ -1704,8 +1704,8 @@ CREATE TABLE IF NOT EXISTS "category_issued_certs" (
     "academicDirectorSignature" TEXT,
     "officialSeal" TEXT,
     "status" TEXT NOT NULL DEFAULT "ACTIVE",
-    CONSTRAINT "category_issued_certs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "category_issued_certs_categoryCertificateId_fkey" FOREIGN KEY ("categoryCertificateId") REFERENCES "category_certificates" ("id") NOT NULL
+    CONSTRAINT "category_issued_certs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "category_issued_certs_categoryCertificateId_fkey" FOREIGN KEY ("categoryCertificateId") REFERENCES "category_certificates" ("id")
 );
 
 -- ApplicationReview -> application_reviews
@@ -1725,7 +1725,7 @@ CREATE TABLE IF NOT EXISTS "application_reviews" (
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "completedAt" TIMESTAMP(3),
-    CONSTRAINT "application_reviews_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "scholarship_applications" ("id") NOT NULL
+    CONSTRAINT "application_reviews_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "scholarship_applications" ("id")
 );
 
 -- ApplicationNotification -> application_notifications
@@ -1741,7 +1741,7 @@ CREATE TABLE IF NOT EXISTS "application_notifications" (
     "readAt" TIMESTAMP(3),
     "metadata" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "application_notifications_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "scholarship_applications" ("id") NOT NULL
+    CONSTRAINT "application_notifications_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "scholarship_applications" ("id")
 );
 
 -- ApplicationStatusHistory -> application_status_history
@@ -1754,7 +1754,7 @@ CREATE TABLE IF NOT EXISTS "application_status_history" (
     "changedByName" TEXT,
     "notes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "application_status_history_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "scholarship_applications" ("id") NOT NULL
+    CONSTRAINT "application_status_history_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "scholarship_applications" ("id")
 );
 
 -- ScholarshipAward -> scholarship_awards
@@ -1803,7 +1803,7 @@ CREATE TABLE IF NOT EXISTS "lessons" (
     "exerciseDescription" TEXT,
     "exerciseFilesUrl" TEXT,
     "solutionVideoUrl" TEXT,
-    CONSTRAINT "lessons_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL,
+    CONSTRAINT "lessons_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id"),
     CONSTRAINT "lessons_moduleId_fkey" FOREIGN KEY ("moduleId") REFERENCES "modules" ("id")
 );
 
@@ -1835,7 +1835,7 @@ CREATE TABLE IF NOT EXISTS "project_submissions" (
     "isFromMCCS" BOOLEAN NOT NULL DEFAULT FALSE,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "project_submissions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "project_submissions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
     CONSTRAINT "project_submissions_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id"),
     CONSTRAINT "project_submissions_miniProjectId_fkey" FOREIGN KEY ("miniProjectId") REFERENCES "mini_projects" ("id")
 );
@@ -1856,7 +1856,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_enrollments" (
     "createdAt" TIMESTAMP(3) NOT NULL,
     "activatedAt" TIMESTAMP(3),
     "expiresAt" TIMESTAMP(3),
-    CONSTRAINT "scholarship_enrollments_awardId_fkey" FOREIGN KEY ("awardId") REFERENCES "scholarship_awards" ("id") NOT NULL
+    CONSTRAINT "scholarship_enrollments_awardId_fkey" FOREIGN KEY ("awardId") REFERENCES "scholarship_awards" ("id")
 );
 
 -- UserLectureProgress -> user_lecture_progress
@@ -1871,8 +1871,8 @@ CREATE TABLE IF NOT EXISTS "user_lecture_progress" (
     "lastPosition" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "user_lecture_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "user_lecture_progress_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id") NOT NULL
+    CONSTRAINT "user_lecture_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "user_lecture_progress_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id")
 );
 
 -- PracticalExercise -> practical_exercises
@@ -1891,7 +1891,7 @@ CREATE TABLE IF NOT EXISTS "practical_exercises" (
     "allowRetry" BOOLEAN NOT NULL DEFAULT TRUE,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "practical_exercises_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id") NOT NULL
+    CONSTRAINT "practical_exercises_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id")
 );
 
 -- Video -> videos
@@ -1905,7 +1905,7 @@ CREATE TABLE IF NOT EXISTS "videos" (
     "storageType" TEXT,
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "videos_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id") NOT NULL
+    CONSTRAINT "videos_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id")
 );
 
 -- Material -> materials
@@ -1918,7 +1918,7 @@ CREATE TABLE IF NOT EXISTS "materials" (
     "visibility" TEXT NOT NULL DEFAULT "public",
     "downloadAllowed" BOOLEAN NOT NULL DEFAULT TRUE,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "materials_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id") NOT NULL
+    CONSTRAINT "materials_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id")
 );
 
 -- LearningProgress -> learning_progress
@@ -1931,9 +1931,9 @@ CREATE TABLE IF NOT EXISTS "learning_progress" (
     "watchTime" INTEGER NOT NULL DEFAULT 0,
     "completedAt" TIMESTAMP(3),
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "learning_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") NOT NULL,
-    CONSTRAINT "learning_progress_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") NOT NULL,
-    CONSTRAINT "learning_progress_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id") NOT NULL
+    CONSTRAINT "learning_progress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id"),
+    CONSTRAINT "learning_progress_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id"),
+    CONSTRAINT "learning_progress_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "lessons" ("id")
 );
 
 -- SubmissionVersion -> submission_versions
@@ -1954,7 +1954,7 @@ CREATE TABLE IF NOT EXISTS "submission_versions" (
     "isLatest" BOOLEAN NOT NULL DEFAULT FALSE,
     "submittedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "submission_versions_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id") NOT NULL
+    CONSTRAINT "submission_versions_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id")
 );
 
 -- ProjectReview -> project_reviews
@@ -1970,8 +1970,8 @@ CREATE TABLE IF NOT EXISTS "project_reviews" (
     "timeSpentMinutes" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "project_reviews_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id") NOT NULL,
-    CONSTRAINT "project_reviews_reviewerId_fkey" FOREIGN KEY ("reviewerId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "project_reviews_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id"),
+    CONSTRAINT "project_reviews_reviewerId_fkey" FOREIGN KEY ("reviewerId") REFERENCES "users" ("id")
 );
 
 -- ProjectStatusHistory -> project_status_history
@@ -1983,7 +1983,7 @@ CREATE TABLE IF NOT EXISTS "project_status_history" (
     "changedBy" TEXT NOT NULL,
     "reason" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "project_status_history_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id") NOT NULL
+    CONSTRAINT "project_status_history_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id")
 );
 
 -- ReviewerAssignment -> reviewer_assignments
@@ -1998,8 +1998,8 @@ CREATE TABLE IF NOT EXISTS "reviewer_assignments" (
     "completedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "reviewer_assignments_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id") NOT NULL,
-    CONSTRAINT "reviewer_assignments_reviewerId_fkey" FOREIGN KEY ("reviewerId") REFERENCES "users" ("id") NOT NULL
+    CONSTRAINT "reviewer_assignments_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id"),
+    CONSTRAINT "reviewer_assignments_reviewerId_fkey" FOREIGN KEY ("reviewerId") REFERENCES "users" ("id")
 );
 
 -- ProjectFeedback -> project_feedback
@@ -2014,7 +2014,7 @@ CREATE TABLE IF NOT EXISTS "project_feedback" (
     "referenceId" TEXT,
     "referenceDetail" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "project_feedback_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "project_reviews" ("id") NOT NULL
+    CONSTRAINT "project_feedback_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "project_reviews" ("id")
 );
 
 -- ProjectScore -> project_scores
@@ -2027,8 +2027,8 @@ CREATE TABLE IF NOT EXISTS "project_scores" (
     "maxPoints" DECIMAL(10,2) NOT NULL,
     "feedback" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "project_scores_rubricId_fkey" FOREIGN KEY ("rubricId") REFERENCES "project_rubrics" ("id") NOT NULL,
-    CONSTRAINT "project_scores_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "project_reviews" ("id") NOT NULL
+    CONSTRAINT "project_scores_rubricId_fkey" FOREIGN KEY ("rubricId") REFERENCES "project_rubrics" ("id"),
+    CONSTRAINT "project_scores_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "project_reviews" ("id")
 );
 
 -- ProjectComment -> project_comments
@@ -2046,8 +2046,8 @@ CREATE TABLE IF NOT EXISTS "project_comments" (
     "resolvedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    CONSTRAINT "project_comments_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id") NOT NULL,
-    CONSTRAINT "project_comments_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id") NOT NULL,
+    CONSTRAINT "project_comments_submissionId_fkey" FOREIGN KEY ("submissionId") REFERENCES "project_submissions" ("id"),
+    CONSTRAINT "project_comments_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users" ("id"),
     CONSTRAINT "project_comments_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "project_comments" ("id")
 );
 
