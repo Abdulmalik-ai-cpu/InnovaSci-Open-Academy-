@@ -533,23 +533,13 @@ END $$;
 -- SEED DATA - SUBSCRIPTION PLANS
 -- ============================================
 
-INSERT INTO plans (id, name, slug, description, "billingCycle", "priceMonthly", "priceAnnual", features, limits, "isActive", "createdAt", "updatedAt")
+INSERT INTO plans (id, name, description, "planType", "billingCycle", features, "isActive", "createdAt", "updatedAt")
 VALUES 
-    (gen_random_uuid(), 'Free', 'free', 'Get started with basic learning', 'monthly', 0, 0, 
-     '["Access to free courses", "Basic progress tracking"]'::jsonb,
-     '{"maxCourses": 5}'::jsonb,
-     true, NOW(), NOW()),
-    
-    (gen_random_uuid(), 'Pro', 'pro', 'Everything you need for scientific learning', 'monthly', 29, 24,
-     '["Access to all courses", "Certificates", "Priority support"]'::jsonb,
-     '{"maxCourses": -1}'::jsonb,
-     true, NOW(), NOW()),
-    
-    (gen_random_uuid(), 'Team', 'team', 'For teams and organizations', 'monthly', 79, 65,
-     '["Everything in Pro", "Team dashboard", "24/7 support"]'::jsonb,
-     '{"maxCourses": -1}'::jsonb,
-     true, NOW(), NOW())
-ON CONFLICT (slug) DO NOTHING;
+    (gen_random_uuid(), 'Free', 'Get started with basic learning', 'subscription', 'monthly', '["Access to free courses", "Basic progress tracking"]'::jsonb, true, NOW(), NOW()),
+
+    (gen_random_uuid(), 'Pro', 'Everything you need for scientific learning', 'subscription', 'monthly', '["Access to all courses", "Certificates", "Priority support"]'::jsonb, true, NOW(), NOW()),
+
+    (gen_random_uuid(), 'Team', 'For teams and organizations', 'subscription', 'monthly', '["Everything in Pro", "Team dashboard", "24/7 support"]'::jsonb, true, NOW(), NOW());
 
 -- ============================================
 -- SEED DATA - LEARNING PATHS
