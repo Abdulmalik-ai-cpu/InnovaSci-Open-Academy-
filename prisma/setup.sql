@@ -533,7 +533,7 @@ END $$;
 -- SEED DATA - SUBSCRIPTION PLANS
 -- ============================================
 
-INSERT INTO subscription_plans (id, name, slug, description, "billingCycle", "priceMonthly", "priceAnnual", features, limits, "isActive", "createdAt", "updatedAt")
+INSERT INTO plans (id, name, slug, description, "billingCycle", "priceMonthly", "priceAnnual", features, limits, "isActive", "createdAt", "updatedAt")
 VALUES 
     (gen_random_uuid(), 'Free', 'free', 'Get started with basic learning', 'monthly', 0, 0, 
      '["Access to free courses", "Basic progress tracking"]'::jsonb,
@@ -572,4 +572,4 @@ SELECT 'Setup Complete!' as status;
 SELECT 'Users: ' || COUNT(*) as result FROM users
 UNION ALL SELECT 'Profiles: ' || COUNT(*) FROM profiles
 UNION ALL SELECT 'Learning Paths: ' || COUNT(*) FROM learning_paths
-UNION ALL SELECT 'Subscription Plans: ' || COUNT(*) FROM subscription_plans;
+UNION ALL SELECT 'Subscription Plans: ' || COUNT(*) FROM plans;
