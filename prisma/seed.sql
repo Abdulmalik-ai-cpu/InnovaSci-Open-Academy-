@@ -92,7 +92,8 @@ VALUES
     
     (gen_random_uuid(), 'Pro', 'Everything you need for scientific learning', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Certificates", "Priority support"]'::jsonb, true, NOW(), NOW()),
     
-    (gen_random_uuid(), 'Team', 'For teams and organizations', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Everything in Pro", "Team dashboard", "24/7 support"]'::jsonb, true, NOW(), NOW());
+    (gen_random_uuid(), 'Team', 'For teams and organizations', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Everything in Pro", "Team dashboard", "24/7 support"]'::jsonb, true, NOW(), NOW())
+ON CONFLICT DO NOTHING;
 
 -- ============================================
 -- SEED DATA - LEARNING PATHS
@@ -104,7 +105,8 @@ VALUES
     (gen_random_uuid(), 'Computational Biology', 'computational-biology', 'Explore biology with computing', true, NOW(), NOW()),
     (gen_random_uuid(), 'Machine Learning', 'machine-learning', 'Become a ML engineer', true, NOW(), NOW()),
     (gen_random_uuid(), 'Fundamentals', 'fundamentals', 'Core concepts for scientists', true, NOW(), NOW()),
-    (gen_random_uuid(), 'Research Methods', 'research-methods', 'Scientific computing tools', true, NOW(), NOW());
+    (gen_random_uuid(), 'Research Methods', 'research-methods', 'Scientific computing tools', true, NOW(), NOW())
+ON CONFLICT (slug) DO NOTHING;
 
 -- ============================================
 -- VERIFICATION
