@@ -72,7 +72,7 @@ END $$;
 
 -- User -> users
 CREATE TABLE IF NOT EXISTS "users" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "email" TEXT NOT NULL UNIQUE,
     "passwordHash" TEXT,
     "role" TEXT NOT NULL DEFAULT 'STUDENT',
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 
 -- Domain -> domains
 CREATE TABLE IF NOT EXISTS "domains" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL UNIQUE,
     "shortName" TEXT,
     "slug" TEXT NOT NULL UNIQUE,
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS "domains" (
 
 -- CertificateTemplate -> certificate_templates
 CREATE TABLE IF NOT EXISTS "certificate_templates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "description" TEXT,
     "type" TEXT NOT NULL DEFAULT 'COURSE',
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS "certificate_templates" (
 
 -- Plan -> plans
 CREATE TABLE IF NOT EXISTS "plans" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "description" TEXT,
     "planType" TEXT NOT NULL DEFAULT 'subscription',
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS "plans" (
 
 -- CurrencySetting -> currency_settings
 CREATE TABLE IF NOT EXISTS "currency_settings" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "currency" TEXT NOT NULL UNIQUE,
     "name" TEXT NOT NULL,
     "symbol" TEXT NOT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS "currency_settings" (
 
 -- PaymentGateway -> payment_gateways
 CREATE TABLE IF NOT EXISTS "payment_gateways" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL UNIQUE,
     "provider" TEXT NOT NULL,
     "slug" TEXT NOT NULL UNIQUE,
@@ -260,7 +260,7 @@ CREATE TABLE IF NOT EXISTS "payment_gateways" (
 
 -- ExchangeRate -> exchange_rates
 CREATE TABLE IF NOT EXISTS "exchange_rates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "fromCurrency" TEXT NOT NULL,
     "toCurrency" TEXT NOT NULL,
     "rate" DECIMAL(10,2) NOT NULL,
@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS "exchange_rates" (
 
 -- PaymentSettings -> payment_settings
 CREATE TABLE IF NOT EXISTS "payment_settings" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "defaultGatewayId" TEXT,
     "defaultCurrency" TEXT NOT NULL DEFAULT 'USD',
     "exchangeRateMode" TEXT NOT NULL DEFAULT 'automatic',
@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS "payment_settings" (
 
 -- Coupon -> coupons
 CREATE TABLE IF NOT EXISTS "coupons" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "code" TEXT NOT NULL UNIQUE,
     "discountType" TEXT NOT NULL,
     "discountValue" DECIMAL(10,2) NOT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS "coupons" (
 
 -- LearningPath -> learning_paths
 CREATE TABLE IF NOT EXISTS "learning_paths" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL UNIQUE,
     "subtitle" TEXT,
@@ -337,7 +337,7 @@ CREATE TABLE IF NOT EXISTS "learning_paths" (
 
 -- NewsletterSubscriber -> newsletter_subscribers
 CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "email" TEXT NOT NULL UNIQUE,
     "isActive" BOOLEAN NOT NULL DEFAULT TRUE,
     "subscribedAt" TIMESTAMP(3) NOT NULL,
@@ -346,7 +346,7 @@ CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
 
 -- NewsletterCampaign -> newsletter_campaigns
 CREATE TABLE IF NOT EXISTS "newsletter_campaigns" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" TEXT NOT NULL,
     "subject" TEXT NOT NULL,
     "content" TEXT NOT NULL,
@@ -365,7 +365,7 @@ CREATE TABLE IF NOT EXISTS "newsletter_campaigns" (
 
 -- StoredFile -> stored_files
 CREATE TABLE IF NOT EXISTS "stored_files" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "originalName" TEXT NOT NULL,
     "storedName" TEXT NOT NULL UNIQUE,
     "fileUrl" TEXT NOT NULL UNIQUE,
@@ -384,7 +384,7 @@ CREATE TABLE IF NOT EXISTS "stored_files" (
 
 -- SystemSetting -> system_settings
 CREATE TABLE IF NOT EXISTS "system_settings" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "key" TEXT NOT NULL UNIQUE,
     "value" TEXT NOT NULL,
     "type" TEXT NOT NULL DEFAULT 'string',
@@ -399,7 +399,7 @@ CREATE TABLE IF NOT EXISTS "system_settings" (
 
 -- DifficultyLevelCapstone -> difficulty_level_caps
 CREATE TABLE IF NOT EXISTS "difficulty_level_caps" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL UNIQUE,
     "description" TEXT,
@@ -415,7 +415,7 @@ CREATE TABLE IF NOT EXISTS "difficulty_level_caps" (
 
 -- ProfessionalCapstone -> professional_caps
 CREATE TABLE IF NOT EXISTS "professional_caps" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL UNIQUE,
     "description" TEXT,
@@ -434,7 +434,7 @@ CREATE TABLE IF NOT EXISTS "professional_caps" (
 
 -- ProjectRubric -> project_rubrics
 CREATE TABLE IF NOT EXISTS "project_rubrics" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "description" TEXT,
     "type" TEXT NOT NULL DEFAULT 'MINI_PROJECT',
@@ -449,7 +449,7 @@ CREATE TABLE IF NOT EXISTS "project_rubrics" (
 
 -- Sponsor -> sponsors
 CREATE TABLE IF NOT EXISTS "sponsors" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "shortName" TEXT,
     "slug" TEXT NOT NULL UNIQUE,
@@ -474,7 +474,7 @@ CREATE TABLE IF NOT EXISTS "sponsors" (
 
 -- ScholarshipAnalytics -> scholarship_analytics
 CREATE TABLE IF NOT EXISTS "scholarship_analytics" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT,
     "date" TIMESTAMP(3) NOT NULL,
     "views" INTEGER NOT NULL DEFAULT 0,
@@ -489,7 +489,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_analytics" (
 
 -- ScholarshipScoringRubric -> scholarship_scoring_rubrics
 CREATE TABLE IF NOT EXISTS "scholarship_scoring_rubrics" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "description" TEXT,
     "criteria" JSONB NOT NULL,
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_scoring_rubrics" (
 
 -- Role -> roles
 CREATE TABLE IF NOT EXISTS "roles" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL UNIQUE,
     "displayName" TEXT NOT NULL,
     "description" TEXT,
@@ -515,7 +515,7 @@ CREATE TABLE IF NOT EXISTS "roles" (
 
 -- Permission -> permissions
 CREATE TABLE IF NOT EXISTS "permissions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL UNIQUE,
     "category" TEXT NOT NULL,
     "description" TEXT,
@@ -526,7 +526,7 @@ CREATE TABLE IF NOT EXISTS "permissions" (
 
 -- Policy -> policies
 CREATE TABLE IF NOT EXISTS "policies" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL UNIQUE,
     "description" TEXT,
     "type" TEXT NOT NULL,
@@ -538,7 +538,7 @@ CREATE TABLE IF NOT EXISTS "policies" (
 
 -- Profile -> profiles
 CREATE TABLE IF NOT EXISTS "profiles" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL UNIQUE,
     "fullName" TEXT,
     "username" TEXT UNIQUE,
@@ -567,7 +567,7 @@ CREATE TABLE IF NOT EXISTS "profiles" (
 
 -- PortfolioEntry -> portfolio_entries
 CREATE TABLE IF NOT EXISTS "portfolio_entries" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -591,7 +591,7 @@ CREATE TABLE IF NOT EXISTS "portfolio_entries" (
 
 -- SupportTicket -> support_tickets
 CREATE TABLE IF NOT EXISTS "support_tickets" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT,
     "email" TEXT NOT NULL,
     "category" TEXT NOT NULL,
@@ -609,7 +609,7 @@ CREATE TABLE IF NOT EXISTS "support_tickets" (
 
 -- Instructor -> instructors
 CREATE TABLE IF NOT EXISTS "instructors" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT,
     "name" TEXT NOT NULL,
     "title" TEXT,
@@ -624,7 +624,7 @@ CREATE TABLE IF NOT EXISTS "instructors" (
 
 -- CertificateProgress -> certificate_progress
 CREATE TABLE IF NOT EXISTS "certificate_progress" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "categoryCertificateId" TEXT,
     "domainCertificateId" TEXT,
@@ -647,7 +647,7 @@ CREATE TABLE IF NOT EXISTS "certificate_progress" (
 
 -- Notification -> notifications
 CREATE TABLE IF NOT EXISTS "notifications" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "message" TEXT NOT NULL,
@@ -660,7 +660,7 @@ CREATE TABLE IF NOT EXISTS "notifications" (
 
 -- AccessLicense -> access_licenses
 CREATE TABLE IF NOT EXISTS "access_licenses" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "licenseType" TEXT NOT NULL,
     "targetId" TEXT NOT NULL,
@@ -681,7 +681,7 @@ CREATE TABLE IF NOT EXISTS "access_licenses" (
 
 -- CertificateEligibility -> certificate_eligibility
 CREATE TABLE IF NOT EXISTS "certificate_eligibility" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "certificateType" TEXT NOT NULL,
     "certificateId" TEXT NOT NULL,
@@ -698,7 +698,7 @@ CREATE TABLE IF NOT EXISTS "certificate_eligibility" (
 
 -- ForumThread -> forum_threads
 CREATE TABLE IF NOT EXISTS "forum_threads" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "category" TEXT NOT NULL DEFAULT 'general',
@@ -716,7 +716,7 @@ CREATE TABLE IF NOT EXISTS "forum_threads" (
 
 -- PortalAssignment -> portal_assignments
 CREATE TABLE IF NOT EXISTS "portal_assignments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL UNIQUE,
     "portal" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
@@ -726,7 +726,7 @@ CREATE TABLE IF NOT EXISTS "portal_assignments" (
 
 -- Invoice -> invoices
 CREATE TABLE IF NOT EXISTS "invoices" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "invoiceNumber" TEXT NOT NULL UNIQUE,
     "userId" TEXT NOT NULL,
     "userEmail" TEXT NOT NULL,
@@ -752,7 +752,7 @@ CREATE TABLE IF NOT EXISTS "invoices" (
 
 -- Payment -> payments
 CREATE TABLE IF NOT EXISTS "payments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "type" TEXT NOT NULL DEFAULT 'one_time',
     "status" TEXT NOT NULL DEFAULT 'PENDING',
@@ -783,7 +783,7 @@ CREATE TABLE IF NOT EXISTS "payments" (
 
 -- DomainCertificate -> domain_certificates
 CREATE TABLE IF NOT EXISTS "domain_certificates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "domainId" TEXT NOT NULL,
     "certificateName" TEXT NOT NULL,
     "description" TEXT,
@@ -798,7 +798,7 @@ CREATE TABLE IF NOT EXISTS "domain_certificates" (
 
 -- Category -> categories
 CREATE TABLE IF NOT EXISTS "categories" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "description" TEXT,
@@ -821,7 +821,7 @@ CREATE TABLE IF NOT EXISTS "categories" (
 
 -- DomainAssignment -> domain_assignments
 CREATE TABLE IF NOT EXISTS "domain_assignments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "domainId" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'HEAD_OF_DOMAIN',
@@ -834,7 +834,7 @@ CREATE TABLE IF NOT EXISTS "domain_assignments" (
 
 -- AcademyPurchase -> academy_purchases
 CREATE TABLE IF NOT EXISTS "academy_purchases" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "planId" TEXT,
     "amountPaid" DECIMAL(10,2) NOT NULL DEFAULT 0,
@@ -858,7 +858,7 @@ CREATE TABLE IF NOT EXISTS "academy_purchases" (
 
 -- DomainPurchase -> domain_purchases
 CREATE TABLE IF NOT EXISTS "domain_purchases" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "planId" TEXT,
     "domainId" TEXT NOT NULL,
@@ -884,7 +884,7 @@ CREATE TABLE IF NOT EXISTS "domain_purchases" (
 
 -- Subscription -> subscriptions
 CREATE TABLE IF NOT EXISTS "subscriptions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "planId" TEXT,
     "planName" TEXT NOT NULL DEFAULT 'FREE',
@@ -904,7 +904,7 @@ CREATE TABLE IF NOT EXISTS "subscriptions" (
 
 -- GatewayConfiguration -> gateway_configurations
 CREATE TABLE IF NOT EXISTS "gateway_configurations" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "gatewayId" TEXT NOT NULL,
     "country" TEXT NOT NULL,
     "countryName" TEXT NOT NULL,
@@ -919,7 +919,7 @@ CREATE TABLE IF NOT EXISTS "gateway_configurations" (
 
 -- PaymentTransaction -> payment_transactions
 CREATE TABLE IF NOT EXISTS "payment_transactions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "gatewayId" TEXT NOT NULL,
     "reference" TEXT NOT NULL UNIQUE,
     "gatewayRef" TEXT,
@@ -952,7 +952,7 @@ CREATE TABLE IF NOT EXISTS "payment_transactions" (
 
 -- PaymentGatewayLog -> payment_gateway_logs
 CREATE TABLE IF NOT EXISTS "payment_gateway_logs" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "gatewayId" TEXT NOT NULL,
     "transactionId" TEXT,
     "logType" TEXT NOT NULL,
@@ -972,7 +972,7 @@ CREATE TABLE IF NOT EXISTS "payment_gateway_logs" (
 
 -- DiscountCampaign -> discount_campaigns
 CREATE TABLE IF NOT EXISTS "discount_campaigns" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "description" TEXT,
     "discountType" TEXT NOT NULL,
@@ -1002,7 +1002,7 @@ CREATE TABLE IF NOT EXISTS "discount_campaigns" (
 
 -- LearningPathProgress -> learning_path_progress
 CREATE TABLE IF NOT EXISTS "learning_path_progress" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "learningPathId" TEXT NOT NULL,
     "enrolledAt" TIMESTAMP(3) NOT NULL,
@@ -1014,7 +1014,7 @@ CREATE TABLE IF NOT EXISTS "learning_path_progress" (
 
 -- CapstoneEnrollment -> capstone_enrollments
 CREATE TABLE IF NOT EXISTS "capstone_enrollments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "difficultyCapstoneId" TEXT,
     "professionalCapstoneId" TEXT,
@@ -1033,7 +1033,7 @@ CREATE TABLE IF NOT EXISTS "capstone_enrollments" (
 
 -- SponsorStudent -> sponsor_students
 CREATE TABLE IF NOT EXISTS "sponsor_students" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "sponsorId" TEXT NOT NULL,
     "studentEmail" TEXT NOT NULL,
     "studentName" TEXT,
@@ -1053,7 +1053,7 @@ CREATE TABLE IF NOT EXISTS "sponsor_students" (
 
 -- Scholarship -> scholarships
 CREATE TABLE IF NOT EXISTS "scholarships" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "name" TEXT NOT NULL,
     "shortName" TEXT,
     "slug" TEXT NOT NULL UNIQUE,
@@ -1103,7 +1103,7 @@ CREATE TABLE IF NOT EXISTS "scholarships" (
 
 -- SponsorReport -> sponsor_reports
 CREATE TABLE IF NOT EXISTS "sponsor_reports" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "sponsorId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -1118,7 +1118,7 @@ CREATE TABLE IF NOT EXISTS "sponsor_reports" (
 
 -- UserRole -> user_roles
 CREATE TABLE IF NOT EXISTS "user_roles" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "roleId" TEXT NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT TRUE,
@@ -1130,7 +1130,7 @@ CREATE TABLE IF NOT EXISTS "user_roles" (
 
 -- RolePermission -> role_permissions
 CREATE TABLE IF NOT EXISTS "role_permissions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "roleId" TEXT NOT NULL,
     "permissionId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
@@ -1140,7 +1140,7 @@ CREATE TABLE IF NOT EXISTS "role_permissions" (
 
 -- PolicyRule -> policy_rules
 CREATE TABLE IF NOT EXISTS "policy_rules" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "policyId" TEXT NOT NULL,
     "ruleType" TEXT NOT NULL,
     "field" TEXT NOT NULL,
@@ -1152,7 +1152,7 @@ CREATE TABLE IF NOT EXISTS "policy_rules" (
 
 -- UserPolicy -> user_policies
 CREATE TABLE IF NOT EXISTS "user_policies" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "policyId" TEXT NOT NULL,
     "scopeId" TEXT,
@@ -1165,7 +1165,7 @@ CREATE TABLE IF NOT EXISTS "user_policies" (
 
 -- TicketComment -> ticket_comments
 CREATE TABLE IF NOT EXISTS "ticket_comments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "ticketId" TEXT NOT NULL,
     "userId" TEXT,
     "message" TEXT NOT NULL,
@@ -1177,7 +1177,7 @@ CREATE TABLE IF NOT EXISTS "ticket_comments" (
 
 -- ForumReply -> forum_replies
 CREATE TABLE IF NOT EXISTS "forum_replies" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "content" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "threadId" TEXT NOT NULL,
@@ -1191,7 +1191,7 @@ CREATE TABLE IF NOT EXISTS "forum_replies" (
 
 -- DomainIssuedCert -> domain_issued_certs
 CREATE TABLE IF NOT EXISTS "domain_issued_certs" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "domainCertificateId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "certificateCode" TEXT NOT NULL UNIQUE,
@@ -1211,7 +1211,7 @@ CREATE TABLE IF NOT EXISTS "domain_issued_certs" (
 
 -- CategoryPurchase -> category_purchases
 CREATE TABLE IF NOT EXISTS "category_purchases" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "planId" TEXT,
     "categoryId" TEXT NOT NULL,
@@ -1240,7 +1240,7 @@ CREATE TABLE IF NOT EXISTS "category_purchases" (
 
 -- Course -> courses
 CREATE TABLE IF NOT EXISTS "courses" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL UNIQUE,
     "categoryId" TEXT,
@@ -1275,7 +1275,7 @@ CREATE TABLE IF NOT EXISTS "courses" (
 
 -- CategoryAssignment -> category_assignments
 CREATE TABLE IF NOT EXISTS "category_assignments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'CATEGORY_LEAD',
@@ -1288,7 +1288,7 @@ CREATE TABLE IF NOT EXISTS "category_assignments" (
 
 -- CategoryCertificate -> category_certificates
 CREATE TABLE IF NOT EXISTS "category_certificates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "categoryId" TEXT NOT NULL,
     "certificateName" TEXT NOT NULL,
     "description" TEXT,
@@ -1303,7 +1303,7 @@ CREATE TABLE IF NOT EXISTS "category_certificates" (
 
 -- ScholarshipApplication -> scholarship_applications
 CREATE TABLE IF NOT EXISTS "scholarship_applications" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "applicationNumber" TEXT NOT NULL UNIQUE,
     "trackingNumber" TEXT NOT NULL UNIQUE,
     "scholarshipId" TEXT NOT NULL,
@@ -1366,7 +1366,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_applications" (
 
 -- ScholarshipDifficulty -> scholarship_difficulties
 CREATE TABLE IF NOT EXISTS "scholarship_difficulties" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "difficultyLevel" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
@@ -1375,7 +1375,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_difficulties" (
 
 -- ScholarshipCertificate -> scholarship_certificates
 CREATE TABLE IF NOT EXISTS "scholarship_certificates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "certificateId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
@@ -1385,7 +1385,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_certificates" (
 
 -- ScholarshipCustomQuestion -> scholarship_custom_questions
 CREATE TABLE IF NOT EXISTS "scholarship_custom_questions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "question" TEXT NOT NULL,
     "questionType" TEXT NOT NULL DEFAULT 'TEXT',
@@ -1402,7 +1402,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_custom_questions" (
 
 -- ScholarshipPlan -> scholarship_plans
 CREATE TABLE IF NOT EXISTS "scholarship_plans" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "planId" TEXT NOT NULL,
     "duration" INTEGER DEFAULT 365,
@@ -1413,7 +1413,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_plans" (
 
 -- ScholarshipDomain -> scholarship_domains
 CREATE TABLE IF NOT EXISTS "scholarship_domains" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "domainId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
@@ -1423,7 +1423,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_domains" (
 
 -- ScholarshipCategory -> scholarship_categories
 CREATE TABLE IF NOT EXISTS "scholarship_categories" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
@@ -1433,7 +1433,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_categories" (
 
 -- ScholarshipReviewer -> scholarship_reviewers
 CREATE TABLE IF NOT EXISTS "scholarship_reviewers" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "scholarshipId" TEXT NOT NULL,
     "reviewerId" TEXT,
     "reviewerEmail" TEXT NOT NULL,
@@ -1451,7 +1451,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_reviewers" (
 
 -- LearningPathCourse -> learning_path_courses
 CREATE TABLE IF NOT EXISTS "learning_path_courses" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "learningPathId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
@@ -1464,7 +1464,7 @@ CREATE TABLE IF NOT EXISTS "learning_path_courses" (
 
 -- CourseObjective -> course_objectives
 CREATE TABLE IF NOT EXISTS "course_objectives" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "objective" TEXT NOT NULL,
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
@@ -1475,7 +1475,7 @@ CREATE TABLE IF NOT EXISTS "course_objectives" (
 
 -- CourseAssignment -> course_assignments
 CREATE TABLE IF NOT EXISTS "course_assignments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'INSTRUCTOR',
@@ -1488,7 +1488,7 @@ CREATE TABLE IF NOT EXISTS "course_assignments" (
 
 -- CourseLearningOutcome -> course_learning_outcomes
 CREATE TABLE IF NOT EXISTS "course_learning_outcomes" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "outcome" TEXT NOT NULL,
     "orderIndex" INTEGER NOT NULL DEFAULT 0,
@@ -1499,7 +1499,7 @@ CREATE TABLE IF NOT EXISTS "course_learning_outcomes" (
 
 -- Module -> modules
 CREATE TABLE IF NOT EXISTS "modules" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -1511,7 +1511,7 @@ CREATE TABLE IF NOT EXISTS "modules" (
 
 -- CourseSEO -> course_seo
 CREATE TABLE IF NOT EXISTS "course_seo" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL UNIQUE,
     "metaTitle" TEXT,
     "metaDescription" TEXT,
@@ -1526,7 +1526,7 @@ CREATE TABLE IF NOT EXISTS "course_seo" (
 
 -- CourseSoftware -> course_software
 CREATE TABLE IF NOT EXISTS "course_software" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "version" TEXT,
@@ -1541,7 +1541,7 @@ CREATE TABLE IF NOT EXISTS "course_software" (
 
 -- CourseResource -> course_resources
 CREATE TABLE IF NOT EXISTS "course_resources" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -1558,7 +1558,7 @@ CREATE TABLE IF NOT EXISTS "course_resources" (
 
 -- MiniProject -> mini_projects
 CREATE TABLE IF NOT EXISTS "mini_projects" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -1579,7 +1579,7 @@ CREATE TABLE IF NOT EXISTS "mini_projects" (
 
 -- Certificate -> certificates
 CREATE TABLE IF NOT EXISTS "certificates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "certificateUrl" TEXT,
@@ -1594,7 +1594,7 @@ CREATE TABLE IF NOT EXISTS "certificates" (
 
 -- CourseDataset -> course_datasets
 CREATE TABLE IF NOT EXISTS "course_datasets" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
@@ -1611,7 +1611,7 @@ CREATE TABLE IF NOT EXISTS "course_datasets" (
 
 -- Enrollment -> enrollments
 CREATE TABLE IF NOT EXISTS "enrollments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "progressPercent" INTEGER NOT NULL DEFAULT 0,
@@ -1624,7 +1624,7 @@ CREATE TABLE IF NOT EXISTS "enrollments" (
 
 -- Prerequisite -> prerequisites
 CREATE TABLE IF NOT EXISTS "prerequisites" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -1638,7 +1638,7 @@ CREATE TABLE IF NOT EXISTS "prerequisites" (
 
 -- CareerOutcome -> career_outcomes
 CREATE TABLE IF NOT EXISTS "career_outcomes" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -1651,7 +1651,7 @@ CREATE TABLE IF NOT EXISTS "career_outcomes" (
 
 -- CourseVersion -> course_versions
 CREATE TABLE IF NOT EXISTS "course_versions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "version" INTEGER NOT NULL,
     "changes" TEXT,
@@ -1662,7 +1662,7 @@ CREATE TABLE IF NOT EXISTS "course_versions" (
 
 -- IssuedCertificate -> issued_certificates
 CREATE TABLE IF NOT EXISTS "issued_certificates" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "certificateId" TEXT NOT NULL UNIQUE,
     "studentId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
@@ -1679,7 +1679,7 @@ CREATE TABLE IF NOT EXISTS "issued_certificates" (
 
 -- Wishlist -> wishlists
 CREATE TABLE IF NOT EXISTS "wishlists" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "addedAt" TIMESTAMP(3) NOT NULL,
@@ -1689,7 +1689,7 @@ CREATE TABLE IF NOT EXISTS "wishlists" (
 
 -- CategoryIssuedCert -> category_issued_certs
 CREATE TABLE IF NOT EXISTS "category_issued_certs" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "categoryCertificateId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "certificateCode" TEXT NOT NULL UNIQUE,
@@ -1710,7 +1710,7 @@ CREATE TABLE IF NOT EXISTS "category_issued_certs" (
 
 -- ApplicationReview -> application_reviews
 CREATE TABLE IF NOT EXISTS "application_reviews" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "applicationId" TEXT NOT NULL,
     "reviewerId" TEXT,
     "reviewerEmail" TEXT,
@@ -1730,7 +1730,7 @@ CREATE TABLE IF NOT EXISTS "application_reviews" (
 
 -- ApplicationNotification -> application_notifications
 CREATE TABLE IF NOT EXISTS "application_notifications" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "applicationId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -1746,7 +1746,7 @@ CREATE TABLE IF NOT EXISTS "application_notifications" (
 
 -- ApplicationStatusHistory -> application_status_history
 CREATE TABLE IF NOT EXISTS "application_status_history" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "applicationId" TEXT NOT NULL,
     "previousStatus" TEXT,
     "newStatus" TEXT NOT NULL,
@@ -1759,7 +1759,7 @@ CREATE TABLE IF NOT EXISTS "application_status_history" (
 
 -- ScholarshipAward -> scholarship_awards
 CREATE TABLE IF NOT EXISTS "scholarship_awards" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "awardNumber" TEXT NOT NULL UNIQUE,
     "applicationId" TEXT UNIQUE,
     "scholarshipId" TEXT NOT NULL,
@@ -1785,7 +1785,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_awards" (
 
 -- Lesson -> lessons
 CREATE TABLE IF NOT EXISTS "lessons" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "courseId" TEXT NOT NULL,
     "moduleId" TEXT,
     "title" TEXT NOT NULL,
@@ -1809,7 +1809,7 @@ CREATE TABLE IF NOT EXISTS "lessons" (
 
 -- ProjectSubmission -> project_submissions
 CREATE TABLE IF NOT EXISTS "project_submissions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "courseId" TEXT,
     "miniProjectId" TEXT,
@@ -1842,7 +1842,7 @@ CREATE TABLE IF NOT EXISTS "project_submissions" (
 
 -- ScholarshipEnrollment -> scholarship_enrollments
 CREATE TABLE IF NOT EXISTS "scholarship_enrollments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "awardId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "membershipId" TEXT,
@@ -1861,7 +1861,7 @@ CREATE TABLE IF NOT EXISTS "scholarship_enrollments" (
 
 -- UserLectureProgress -> user_lecture_progress
 CREATE TABLE IF NOT EXISTS "user_lecture_progress" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "lessonId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
@@ -1877,7 +1877,7 @@ CREATE TABLE IF NOT EXISTS "user_lecture_progress" (
 
 -- PracticalExercise -> practical_exercises
 CREATE TABLE IF NOT EXISTS "practical_exercises" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "lessonId" TEXT NOT NULL UNIQUE,
     "instructions" TEXT,
     "starterCode" TEXT,
@@ -1896,7 +1896,7 @@ CREATE TABLE IF NOT EXISTS "practical_exercises" (
 
 -- Video -> videos
 CREATE TABLE IF NOT EXISTS "videos" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "lessonId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "videoUrl" TEXT NOT NULL,
@@ -1910,7 +1910,7 @@ CREATE TABLE IF NOT EXISTS "videos" (
 
 -- Material -> materials
 CREATE TABLE IF NOT EXISTS "materials" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "lessonId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "type" TEXT,
@@ -1923,7 +1923,7 @@ CREATE TABLE IF NOT EXISTS "materials" (
 
 -- LearningProgress -> learning_progress
 CREATE TABLE IF NOT EXISTS "learning_progress" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "lessonId" TEXT NOT NULL,
@@ -1938,7 +1938,7 @@ CREATE TABLE IF NOT EXISTS "learning_progress" (
 
 -- SubmissionVersion -> submission_versions
 CREATE TABLE IF NOT EXISTS "submission_versions" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "submissionId" TEXT NOT NULL,
     "versionNumber" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
@@ -1959,7 +1959,7 @@ CREATE TABLE IF NOT EXISTS "submission_versions" (
 
 -- ProjectReview -> project_reviews
 CREATE TABLE IF NOT EXISTS "project_reviews" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "submissionId" TEXT NOT NULL,
     "versionId" TEXT,
     "reviewerId" TEXT NOT NULL,
@@ -1976,7 +1976,7 @@ CREATE TABLE IF NOT EXISTS "project_reviews" (
 
 -- ProjectStatusHistory -> project_status_history
 CREATE TABLE IF NOT EXISTS "project_status_history" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "submissionId" TEXT NOT NULL,
     "previousStatus" TEXT,
     "newStatus" TEXT NOT NULL,
@@ -1988,7 +1988,7 @@ CREATE TABLE IF NOT EXISTS "project_status_history" (
 
 -- ReviewerAssignment -> reviewer_assignments
 CREATE TABLE IF NOT EXISTS "reviewer_assignments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "submissionId" TEXT NOT NULL,
     "reviewerId" TEXT NOT NULL,
     "assignedAt" TIMESTAMP(3) NOT NULL,
@@ -2004,7 +2004,7 @@ CREATE TABLE IF NOT EXISTS "reviewer_assignments" (
 
 -- ProjectFeedback -> project_feedback
 CREATE TABLE IF NOT EXISTS "project_feedback" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "reviewId" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "title" TEXT,
@@ -2019,7 +2019,7 @@ CREATE TABLE IF NOT EXISTS "project_feedback" (
 
 -- ProjectScore -> project_scores
 CREATE TABLE IF NOT EXISTS "project_scores" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "reviewId" TEXT NOT NULL,
     "rubricId" TEXT NOT NULL,
     "criteriaName" TEXT NOT NULL,
@@ -2033,7 +2033,7 @@ CREATE TABLE IF NOT EXISTS "project_scores" (
 
 -- ProjectComment -> project_comments
 CREATE TABLE IF NOT EXISTS "project_comments" (
-    "id" TEXT NOT NULL DEFAULT uuid_generate_v4(),
+    "id" TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     "submissionId" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
