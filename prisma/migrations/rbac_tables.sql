@@ -7,7 +7,7 @@
 -- RBAC - ROLES - Role definitions for the platform
 -- ============================================
 CREATE TABLE IF NOT EXISTS "roles" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" TEXT UNIQUE NOT NULL,
   "displayName" TEXT NOT NULL,
   "description" TEXT,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "roles" (
 -- RBAC - PERMISSIONS - Granular permissions
 -- ============================================
 CREATE TABLE IF NOT EXISTS "permissions" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" TEXT UNIQUE NOT NULL,
   "category" TEXT NOT NULL,
   "description" TEXT,
@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS "permissions" (
 -- RBAC - ROLE PERMISSIONS - Many-to-many
 -- ============================================
 CREATE TABLE IF NOT EXISTS "role_permissions" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "roleId" UUID NOT NULL,
-  "permissionId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "roleId" TEXT NOT NULL,
+  "permissionId" TEXT NOT NULL,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
   UNIQUE("roleId", "permissionId")
 );
@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS "role_permissions" (
 -- RBAC - USER ROLES - User to Role mapping
 -- ============================================
 CREATE TABLE IF NOT EXISTS "user_roles" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "roleId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "roleId" TEXT NOT NULL,
   "isActive" BOOLEAN DEFAULT true,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS "user_roles" (
 -- PBAC - POLICIES - Policy definitions
 -- ============================================
 CREATE TABLE IF NOT EXISTS "policies" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" TEXT UNIQUE NOT NULL,
   "description" TEXT,
   "type" TEXT NOT NULL,
@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS "policies" (
 -- PBAC - POLICY RULES - Specific rules
 -- ============================================
 CREATE TABLE IF NOT EXISTS "policy_rules" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "policyId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "policyId" TEXT NOT NULL,
   "ruleType" TEXT NOT NULL,
   "field" TEXT NOT NULL,
   "operator" TEXT NOT NULL,
@@ -86,9 +86,9 @@ CREATE TABLE IF NOT EXISTS "policy_rules" (
 -- PBAC - USER POLICIES - User to Policy mapping
 -- ============================================
 CREATE TABLE IF NOT EXISTS "user_policies" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "policyId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "policyId" TEXT NOT NULL,
   "scopeId" TEXT,
   "isActive" BOOLEAN DEFAULT true,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS "user_policies" (
 -- PORTAL ASSIGNMENTS - Portal tracking
 -- ============================================
 CREATE TABLE IF NOT EXISTS "portal_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID UNIQUE NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT UNIQUE NOT NULL,
   "portal" TEXT NOT NULL,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP
@@ -111,9 +111,9 @@ CREATE TABLE IF NOT EXISTS "portal_assignments" (
 -- DOMAIN ASSIGNMENTS - Head of Domain
 -- ============================================
 CREATE TABLE IF NOT EXISTS "domain_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "domainId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "domainId" TEXT NOT NULL,
   "role" TEXT DEFAULT 'HEAD_OF_DOMAIN',
   "status" TEXT DEFAULT 'ACTIVE',
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -125,9 +125,9 @@ CREATE TABLE IF NOT EXISTS "domain_assignments" (
 -- CATEGORY ASSIGNMENTS - Category Lead
 -- ============================================
 CREATE TABLE IF NOT EXISTS "category_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "categoryId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "categoryId" TEXT NOT NULL,
   "role" TEXT DEFAULT 'CATEGORY_LEAD',
   "status" TEXT DEFAULT 'ACTIVE',
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -139,9 +139,9 @@ CREATE TABLE IF NOT EXISTS "category_assignments" (
 -- COURSE ASSIGNMENTS - Instructor
 -- ============================================
 CREATE TABLE IF NOT EXISTS "course_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "courseId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "courseId" TEXT NOT NULL,
   "role" TEXT DEFAULT 'INSTRUCTOR',
   "status" TEXT DEFAULT 'ACTIVE',
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -444,12 +444,12 @@ ON CONFLICT ("email") DO UPDATE SET "passwordHash" = EXCLUDED."passwordHash", "r
 -- Get role IDs
 DO $$
 DECLARE
-  super_admin_id UUID;
-  system_admin_id UUID;
-  academic_director_id UUID;
-  head_of_domain_id UUID;
-  category_lead_id UUID;
-  instructor_id UUID;
+  super_admin_id TEXT;
+  system_admin_id TEXT;
+  academic_director_id TEXT;
+  head_of_domain_id TEXT;
+  category_lead_id TEXT;
+  instructor_id TEXT;
 BEGIN
   SELECT "id" INTO super_admin_id FROM "roles" WHERE "name" = 'SUPER_ADMIN';
   SELECT "id" INTO system_admin_id FROM "roles" WHERE "name" = 'SYSTEM_ADMIN';

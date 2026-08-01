@@ -4,7 +4,7 @@
 -- Can be run multiple times safely (uses DROP IF EXISTS)
 -- ============================================
 
--- Enable UUID extension
+-- Enable TEXT extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================
@@ -39,7 +39,7 @@ DROP TABLE IF EXISTS system_settings CASCADE;
 -- 1. USERS TABLE
 -- ============================================
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE NOT NULL,
     "passwordHash" VARCHAR(255),
     role VARCHAR(50) DEFAULT 'STUDENT',
@@ -53,8 +53,8 @@ CREATE TABLE users (
 -- 2. PROFILES TABLE
 -- ============================================
 CREATE TABLE profiles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     "fullName" VARCHAR(255),
     username VARCHAR(100) UNIQUE,
     phone VARCHAR(50),
@@ -73,7 +73,7 @@ CREATE TABLE profiles (
 -- 3. COURSES TABLE
 -- ============================================
 CREATE TABLE courses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     category VARCHAR(100),
@@ -99,8 +99,8 @@ CREATE TABLE courses (
 -- 4. MODULES TABLE
 -- ============================================
 CREATE TABLE modules (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     "orderIndex" INTEGER DEFAULT 0,
@@ -113,9 +113,9 @@ CREATE TABLE modules (
 -- 5. LESSONS TABLE
 -- ============================================
 CREATE TABLE lessons (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
-    "moduleId" UUID REFERENCES modules(id) ON DELETE SET NULL,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    "moduleId" TEXT REFERENCES modules(id) ON DELETE SET NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     "orderIndex" INTEGER DEFAULT 0,
@@ -131,8 +131,8 @@ CREATE TABLE lessons (
 -- 6. MATERIALS TABLE
 -- ============================================
 CREATE TABLE materials (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "lessonId" UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "lessonId" TEXT NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     type VARCHAR(50),
     "fileUrl" VARCHAR(500) NOT NULL,
@@ -145,8 +145,8 @@ CREATE TABLE materials (
 -- 7. VIDEOS TABLE
 -- ============================================
 CREATE TABLE videos (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "lessonId" UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "lessonId" TEXT NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     "videoUrl" VARCHAR(500) NOT NULL,
     duration INTEGER,
@@ -160,9 +160,9 @@ CREATE TABLE videos (
 -- 8. ENROLLMENTS TABLE
 -- ============================================
 CREATE TABLE enrollments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     "progressPercent" INTEGER DEFAULT 0,
     completed BOOLEAN DEFAULT false,
     "enrolledAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -174,10 +174,10 @@ CREATE TABLE enrollments (
 -- 9. LEARNING PROGRESS TABLE
 -- ============================================
 CREATE TABLE learning_progress (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
-    "lessonId" UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    "lessonId" TEXT NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
     completed BOOLEAN DEFAULT false,
     "watchTime" INTEGER DEFAULT 0,
     "completedAt" TIMESTAMP,
@@ -189,10 +189,10 @@ CREATE TABLE learning_progress (
 -- 10. USER LECTURE PROGRESS TABLE
 -- ============================================
 CREATE TABLE user_lecture_progress (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    "lessonId" UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    "lessonId" TEXT NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     completed BOOLEAN DEFAULT false,
     "completedAt" TIMESTAMP,
     "watchTime" INTEGER DEFAULT 0,
@@ -206,9 +206,9 @@ CREATE TABLE user_lecture_progress (
 -- 11. CERTIFICATES TABLE
 -- ============================================
 CREATE TABLE certificates (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     "certificateUrl" VARCHAR(500),
     "verificationCode" VARCHAR(100) UNIQUE NOT NULL,
     "issuedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -220,8 +220,8 @@ CREATE TABLE certificates (
 -- 12. PAYMENTS TABLE
 -- ============================================
 CREATE TABLE payments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     amount DECIMAL(10,2) NOT NULL,
     currency VARCHAR(10) DEFAULT 'NGN',
     status VARCHAR(50) DEFAULT 'PENDING',
@@ -239,8 +239,8 @@ CREATE TABLE payments (
 -- 13. SUBSCRIPTIONS TABLE
 -- ============================================
 CREATE TABLE subscriptions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     plan VARCHAR(100) NOT NULL,
     status VARCHAR(50) DEFAULT 'active',
     "startDate" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -254,7 +254,7 @@ CREATE TABLE subscriptions (
 -- 14. LEARNING PATHS TABLE
 -- ============================================
 CREATE TABLE learning_paths (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
@@ -268,9 +268,9 @@ CREATE TABLE learning_paths (
 -- 15. LEARNING PATH COURSES TABLE
 -- ============================================
 CREATE TABLE learning_path_courses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "learningPathId" UUID NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "learningPathId" TEXT NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     "orderIndex" INTEGER DEFAULT 0,
     "isRequired" BOOLEAN DEFAULT true,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -281,9 +281,9 @@ CREATE TABLE learning_path_courses (
 -- 16. LEARNING PATH PROGRESS TABLE
 -- ============================================
 CREATE TABLE learning_path_progress (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    "learningPathId" UUID NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    "learningPathId" TEXT NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
     "enrolledAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "completedAt" TIMESTAMP,
     "progressPercent" INTEGER DEFAULT 0,
@@ -294,9 +294,9 @@ CREATE TABLE learning_path_progress (
 -- 17. WISHLISTS TABLE
 -- ============================================
 CREATE TABLE wishlists (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    "courseId" UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    "courseId" TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     "addedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE("userId", "courseId")
 );
@@ -305,8 +305,8 @@ CREATE TABLE wishlists (
 -- 18. NOTIFICATIONS TABLE
 -- ============================================
 CREATE TABLE notifications (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
     type VARCHAR(50) DEFAULT 'info',
@@ -319,8 +319,8 @@ CREATE TABLE notifications (
 -- 19. AUDIT LOGS TABLE
 -- ============================================
 CREATE TABLE audit_logs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT REFERENCES profiles(id) ON DELETE SET NULL,
     action VARCHAR(100) NOT NULL,
     module VARCHAR(100),
     details JSONB,
@@ -332,8 +332,8 @@ CREATE TABLE audit_logs (
 -- 20. SUPPORT TICKETS TABLE
 -- ============================================
 CREATE TABLE support_tickets (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT REFERENCES profiles(id) ON DELETE SET NULL,
     email VARCHAR(255) NOT NULL,
     category VARCHAR(50) NOT NULL,
     subject VARCHAR(255),
@@ -350,9 +350,9 @@ CREATE TABLE support_tickets (
 -- 21. TICKET COMMENTS TABLE
 -- ============================================
 CREATE TABLE ticket_comments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "ticketId" UUID NOT NULL REFERENCES support_tickets(id) ON DELETE CASCADE,
-    "userId" UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "ticketId" TEXT NOT NULL REFERENCES support_tickets(id) ON DELETE CASCADE,
+    "userId" TEXT REFERENCES profiles(id) ON DELETE SET NULL,
     message TEXT NOT NULL,
     "isInternal" BOOLEAN DEFAULT false,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -362,7 +362,7 @@ CREATE TABLE ticket_comments (
 -- 22. NEWSLETTER SUBSCRIBERS TABLE
 -- ============================================
 CREATE TABLE newsletter_subscribers (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE NOT NULL,
     "isActive" BOOLEAN DEFAULT true,
     "subscribedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -373,7 +373,7 @@ CREATE TABLE newsletter_subscribers (
 -- 23. SYSTEM SETTINGS TABLE
 -- ============================================
 CREATE TABLE system_settings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     key VARCHAR(255) UNIQUE NOT NULL,
     value TEXT NOT NULL,
     type VARCHAR(50) DEFAULT 'string',

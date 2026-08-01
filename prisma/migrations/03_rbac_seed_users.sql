@@ -6,12 +6,12 @@
 -- Get role IDs for assignments
 DO $$
 DECLARE
-  super_admin_id UUID;
-  system_admin_id UUID;
-  academic_director_id UUID;
-  head_of_domain_id UUID;
-  category_lead_id UUID;
-  instructor_id UUID;
+  super_admin_id TEXT;
+  system_admin_id TEXT;
+  academic_director_id TEXT;
+  head_of_domain_id TEXT;
+  category_lead_id TEXT;
+  instructor_id TEXT;
 BEGIN
   SELECT "id" INTO super_admin_id FROM "roles" WHERE "name" = 'SUPER_ADMIN';
   SELECT "id" INTO system_admin_id FROM "roles" WHERE "name" = 'SYSTEM_ADMIN';

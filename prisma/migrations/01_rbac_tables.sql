@@ -4,7 +4,7 @@
 
 -- Roles table
 CREATE TABLE IF NOT EXISTS "roles" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" TEXT UNIQUE NOT NULL,
   "displayName" TEXT NOT NULL,
   "description" TEXT,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS "roles" (
 
 -- Permissions table
 CREATE TABLE IF NOT EXISTS "permissions" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" TEXT UNIQUE NOT NULL,
   "category" TEXT NOT NULL,
   "description" TEXT,
@@ -28,18 +28,18 @@ CREATE TABLE IF NOT EXISTS "permissions" (
 
 -- Role permissions (many-to-many)
 CREATE TABLE IF NOT EXISTS "role_permissions" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "roleId" UUID NOT NULL,
-  "permissionId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "roleId" TEXT NOT NULL,
+  "permissionId" TEXT NOT NULL,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
   UNIQUE("roleId", "permissionId")
 );
 
 -- User roles
 CREATE TABLE IF NOT EXISTS "user_roles" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "roleId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "roleId" TEXT NOT NULL,
   "isActive" BOOLEAN DEFAULT true,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS "user_roles" (
 
 -- Policies
 CREATE TABLE IF NOT EXISTS "policies" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
   "name" TEXT UNIQUE NOT NULL,
   "description" TEXT,
   "type" TEXT NOT NULL,
@@ -60,8 +60,8 @@ CREATE TABLE IF NOT EXISTS "policies" (
 
 -- Policy rules
 CREATE TABLE IF NOT EXISTS "policy_rules" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "policyId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "policyId" TEXT NOT NULL,
   "ruleType" TEXT NOT NULL,
   "field" TEXT NOT NULL,
   "operator" TEXT NOT NULL,
@@ -71,9 +71,9 @@ CREATE TABLE IF NOT EXISTS "policy_rules" (
 
 -- User policies
 CREATE TABLE IF NOT EXISTS "user_policies" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "policyId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "policyId" TEXT NOT NULL,
   "scopeId" TEXT,
   "isActive" BOOLEAN DEFAULT true,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS "user_policies" (
 
 -- Portal assignments
 CREATE TABLE IF NOT EXISTS "portal_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID UNIQUE NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT UNIQUE NOT NULL,
   "portal" TEXT NOT NULL,
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP
@@ -92,9 +92,9 @@ CREATE TABLE IF NOT EXISTS "portal_assignments" (
 
 -- Domain assignments
 CREATE TABLE IF NOT EXISTS "domain_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "domainId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "domainId" TEXT NOT NULL,
   "role" TEXT DEFAULT 'HEAD_OF_DOMAIN',
   "status" TEXT DEFAULT 'ACTIVE',
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -104,9 +104,9 @@ CREATE TABLE IF NOT EXISTS "domain_assignments" (
 
 -- Category assignments
 CREATE TABLE IF NOT EXISTS "category_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "categoryId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "categoryId" TEXT NOT NULL,
   "role" TEXT DEFAULT 'CATEGORY_LEAD',
   "status" TEXT DEFAULT 'ACTIVE',
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -116,9 +116,9 @@ CREATE TABLE IF NOT EXISTS "category_assignments" (
 
 -- Course assignments
 CREATE TABLE IF NOT EXISTS "course_assignments" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL,
-  "courseId" UUID NOT NULL,
+  "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  "userId" TEXT NOT NULL,
+  "courseId" TEXT NOT NULL,
   "role" TEXT DEFAULT 'INSTRUCTOR',
   "status" TEXT DEFAULT 'ACTIVE',
   "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,

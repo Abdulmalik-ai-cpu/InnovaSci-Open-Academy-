@@ -39,7 +39,7 @@ CREATE INDEX IF NOT EXISTS idx_lessons_is_exercise ON lessons(is_exercise);
 
 -- Create learning_paths table
 CREATE TABLE IF NOT EXISTS learning_paths (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL,
     description TEXT,
@@ -53,9 +53,9 @@ CREATE TABLE IF NOT EXISTS learning_paths (
 
 -- Create learning_path_courses junction table
 CREATE TABLE IF NOT EXISTS learning_path_courses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    learning_path_id UUID NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
-    course_id UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    learning_path_id TEXT NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
+    course_id TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     order_index INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(learning_path_id, course_id)
@@ -63,9 +63,9 @@ CREATE TABLE IF NOT EXISTS learning_path_courses (
 
 -- Create learning_path_progress table
 CREATE TABLE IF NOT EXISTS learning_path_progress (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    learning_path_id UUID NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    learning_path_id TEXT NOT NULL REFERENCES learning_paths(id) ON DELETE CASCADE,
     progress_percent INTEGER DEFAULT 0,
     completed BOOLEAN DEFAULT FALSE,
     started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS learning_path_progress (
 -- ============================================
 
 CREATE TABLE IF NOT EXISTS plans (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL,
     description TEXT,
@@ -95,9 +95,9 @@ CREATE TABLE IF NOT EXISTS plans (
 );
 
 CREATE TABLE IF NOT EXISTS subscriptions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    plan_id UUID REFERENCES plans(id),
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    plan_id TEXT REFERENCES plans(id),
     status TEXT DEFAULT 'active',
     current_period_start TIMESTAMP WITH TIME ZONE,
     current_period_end TIMESTAMP WITH TIME ZONE,
