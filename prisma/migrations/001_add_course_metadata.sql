@@ -111,12 +111,12 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 -- ============================================
 
 -- Insert sample plans
-INSERT INTO plans (name, slug, description, price_monthly, price_yearly, features, is_active, is_featured)
+INSERT INTO plans (name, description, "planType", "billingCycle", "purchaseScope", "pricingMode", features, "isActive", "isFeatured")
 VALUES 
-    ('Free', 'free', 'Access to free courses', 0, 0, '["Access to free courses", "Community forum access", "Basic support"]', true, false),
-    ('Basic', 'basic', 'Access to all courses', 9.99, 99.99, '["Access to all courses", "Downloadable resources", "Priority support", "Certificates"]', true, false),
-    ('Pro', 'pro', 'Premium learning experience', 19.99, 199.99, '["Access to all courses", "Downloadable resources", "1-on-1 mentorship", "Priority support", "Premium certificates", "Learning paths"]', true, true)
-ON CONFLICT (slug) DO NOTHING;
+    (gen_random_uuid(), 'Free', 'Access to free courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to free courses", "Community forum access", "Basic support"]'::jsonb, true, false),
+    (gen_random_uuid(), 'Basic', 'Access to all courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "Priority support", "Certificates"]'::jsonb, true, false),
+    (gen_random_uuid(), 'Pro', 'Premium learning experience', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "1-on-1 mentorship", "Priority support", "Premium certificates", "Learning paths"]'::jsonb, true, true)
+ON CONFLICT DO NOTHING;
 
 -- ============================================
 -- Verification Queries
