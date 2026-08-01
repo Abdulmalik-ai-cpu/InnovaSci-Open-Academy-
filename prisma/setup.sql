@@ -533,13 +533,13 @@ END $$;
 -- SEED DATA - SUBSCRIPTION PLANS
 -- ============================================
 
-INSERT INTO plans (id, name, description, "planType", "billingCycle", features, "isActive", "createdAt", "updatedAt")
+INSERT INTO plans (id, name, description, "planType", "billingCycle", "purchaseScope", "pricingMode", features, "isActive", "createdAt", "updatedAt")
 VALUES 
-    (gen_random_uuid(), 'Free', 'Get started with basic learning', 'subscription', 'monthly', '["Access to free courses", "Basic progress tracking"]'::jsonb, true, NOW(), NOW()),
+    (gen_random_uuid(), 'Free', 'Get started with basic learning', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to free courses", "Basic progress tracking"]'::jsonb, true, NOW(), NOW()),
 
-    (gen_random_uuid(), 'Pro', 'Everything you need for scientific learning', 'subscription', 'monthly', '["Access to all courses", "Certificates", "Priority support"]'::jsonb, true, NOW(), NOW()),
+    (gen_random_uuid(), 'Pro', 'Everything you need for scientific learning', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Certificates", "Priority support"]'::jsonb, true, NOW(), NOW()),
 
-    (gen_random_uuid(), 'Team', 'For teams and organizations', 'subscription', 'monthly', '["Everything in Pro", "Team dashboard", "24/7 support"]'::jsonb, true, NOW(), NOW());
+    (gen_random_uuid(), 'Team', 'For teams and organizations', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Everything in Pro", "Team dashboard", "24/7 support"]'::jsonb, true, NOW(), NOW());
 
 -- ============================================
 -- SEED DATA - LEARNING PATHS
