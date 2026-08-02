@@ -1,24 +1,17 @@
 import { PrismaClient } from "@prisma/client"
-import * as bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
-// Admin configuration from environment variables
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@innovasci.com"
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
-
-// System Admin UUID - MUST use this exact ID
-const SYSTEM_ADMIN_ID = "d2b7ac6d-0e84-4be7-89bd-4f93b15a2b51"
-
 async function main() {
   console.log("Starting database seed...")
-  
-  if (!ADMIN_PASSWORD) {
-    console.error("\n❌ ERROR: ADMIN_PASSWORD environment variable is not set!")
-    console.error("Please set the ADMIN_PASSWORD in your .env file.")
-    console.error("Example: ADMIN_PASSWORD=your_secure_password")
-    throw new Error("ADMIN_PASSWORD environment variable is required")
-  }
+  console.log("Note: User accounts are now managed by db:seed-rbac script")
+  console.log("      - SUPER_ADMIN: super@innovasci.com")
+  console.log("      - SYSTEM_ADMIN: systemadmin@innovasci.com")
+  console.log("      - ACADEMIC_DIRECTOR: directoracademic@innovasci.com")
+  console.log("      - HEAD_OF_DOMAIN: head@innovasci.com")
+  console.log("      - CATEGORY_LEAD: lead@innovasci.com")
+  console.log("      - INSTRUCTOR: instructor@innovasci.com")
+  console.log("")
 
   try {
     // Create Categories first
@@ -42,30 +35,6 @@ async function main() {
       createdCategories[cat.slug] = existingCategory
       console.log("✓ Category:", cat.name)
     }
-    
-    // Hash the admin password
-    const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 12)
-    
-    // Create Admin User with specific UUID
-    const admin = await prisma.user.upsert({
-      where: { email: ADMIN_EMAIL },
-      update: {},
-      create: {
-        id: SYSTEM_ADMIN_ID,
-        email: ADMIN_EMAIL,
-        passwordHash: hashedPassword,
-        role: "ADMIN",
-        status: "ACTIVE",
-        profile: {
-          create: {
-            fullName: "System Administrator",
-            username: "admin",
-          }
-        }
-      },
-      include: { profile: true }
-    })
-    console.log("✓ Admin user created:", admin.email)
 
     // Initialize System Settings (using existing key-value model)
     await prisma.systemSetting.upsert({
@@ -321,9 +290,8 @@ async function main() {
     console.log("✓ Linked Mobile App Development to Mobile App Development Path")
 
     console.log("\n✅ Database seeding completed successfully!")
-    console.log("\n🔐 Admin Credentials:")
-    console.log("  Email:    " + ADMIN_EMAIL)
-    console.log("  Password: [Set in ADMIN_PASSWORD env variable]")
+    console.log("\n🔐 User accounts are managed by db:seed-rbac script.")
+    console.log("   See db:seed-rbac output for login credentials.")
     
   } catch (error) {
     console.error("\n❌ Error seeding database:", error)

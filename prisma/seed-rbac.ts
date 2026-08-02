@@ -2,6 +2,14 @@
  * InnovaSci Open Academy - RBAC Seed
  * 
  * This seed initializes RBAC roles, permissions, and creates seed users.
+ * 
+ * Environment Variables Required:
+ * - SUPER_ADMIN_PASSWORD
+ * - SYSTEM_ADMIN_PASSWORD
+ * - ACADEMIC_DIRECTOR_PASSWORD
+ * - HEAD_OF_DOMAIN_PASSWORD
+ * - CATEGORY_LEAD_PASSWORD
+ * - INSTRUCTOR_PASSWORD
  */
 
 import { PrismaClient } from "@prisma/client"
@@ -9,11 +17,16 @@ import * as bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
+// Get passwords from environment variables
+const getPassword = (envVar: string, defaultPassword: string): string => {
+  return process.env[envVar] || defaultPassword
+}
+
 // Seed user credentials
 const SEED_USERS = [
   {
     email: "super@innovasci.com",
-    password: "Supa$$$",
+    password: getPassword("SUPER_ADMIN_PASSWORD", "Supa$$$"),
     role: "SUPER_ADMIN",
     roleName: "Super Administrator",
     portal: "ADMINISTRATION",
@@ -21,7 +34,7 @@ const SEED_USERS = [
   },
   {
     email: "systemadmin@innovasci.com",
-    password: "Systemadmin$$$$4",
+    password: getPassword("SYSTEM_ADMIN_PASSWORD", "Systemadmin$$$$4"),
     role: "SYSTEM_ADMIN",
     roleName: "System Administrator",
     portal: "ADMINISTRATION",
@@ -29,7 +42,7 @@ const SEED_USERS = [
   },
   {
     email: "directoracademic@innovasci.com",
-    password: "Director$$$$2",
+    password: getPassword("ACADEMIC_DIRECTOR_PASSWORD", "Director$$$$2"),
     role: "ACADEMIC_DIRECTOR",
     roleName: "Academic Director",
     portal: "ACADEMIC",
@@ -37,7 +50,7 @@ const SEED_USERS = [
   },
   {
     email: "head@innovasci.com",
-    password: "Head$$$$3",
+    password: getPassword("HEAD_OF_DOMAIN_PASSWORD", "Head$$$$3"),
     role: "HEAD_OF_DOMAIN",
     roleName: "Head of Domain",
     portal: "ACADEMIC",
@@ -45,7 +58,7 @@ const SEED_USERS = [
   },
   {
     email: "lead@innovasci.com",
-    password: "Lead$$$$4",
+    password: getPassword("CATEGORY_LEAD_PASSWORD", "Lead$$$$4"),
     role: "CATEGORY_LEAD",
     roleName: "Category Lead",
     portal: "ACADEMIC",
@@ -53,7 +66,7 @@ const SEED_USERS = [
   },
   {
     email: "instructor@innovasci.com",
-    password: "Instructor$$$$2",
+    password: getPassword("INSTRUCTOR_PASSWORD", "Instructor$$$$2"),
     role: "INSTRUCTOR",
     roleName: "Instructor",
     portal: "INSTRUCTOR",

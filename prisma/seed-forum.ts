@@ -9,16 +9,16 @@ async function main() {
   let systemUser = await prisma.user.findFirst({
     where: { 
       OR: [
-        { email: "admin@innosci.org" },
+        { email: "super@innovasci.com" },
         { email: "system@innosci.org" }
       ]
     }
   })
 
   if (!systemUser) {
-    // Try to find any admin user
+    // Try to find SUPER_ADMIN user
     systemUser = await prisma.user.findFirst({
-      where: { role: { in: ["ADMIN", "SUPER_ADMIN"] } }
+      where: { role: "SUPER_ADMIN" }
     })
   }
 
