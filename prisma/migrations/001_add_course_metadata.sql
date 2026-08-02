@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 -- ============================================
 
 -- Insert sample plans
-INSERT INTO plans (name, description, "planType", "billingCycle", "purchaseScope", "pricingMode", features, "isActive", "isFeatured")
+INSERT INTO plans (id, name, description, "planType", "billingCycle", "purchaseScope", "pricingMode", features, "isActive", "isFeatured")
 VALUES 
     (gen_random_uuid(), 'Free', 'Access to free courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to free courses", "Community forum access", "Basic support"]'::jsonb, true, false),
     (gen_random_uuid(), 'Basic', 'Access to all courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "Priority support", "Certificates"]'::jsonb, true, false),
