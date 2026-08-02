@@ -148,38 +148,38 @@ BEGIN
   -- ============================================
 
   -- Super Admin -> Administration portal
-  INSERT INTO "portal_assignments" ("userId", "portal")
-  SELECT u."id", 'ADMINISTRATION'
+  INSERT INTO "portal_assignments" ("userId", "portal", "createdAt", "updatedAt")
+  SELECT u."id", 'ADMINISTRATION', NOW(), NOW()
   FROM "users" u WHERE u."email" = 'super@innovasci.com'
   ON CONFLICT ("userId") DO UPDATE SET "portal" = EXCLUDED."portal";
 
   -- System Admin -> Administration portal
-  INSERT INTO "portal_assignments" ("userId", "portal")
-  SELECT u."id", 'ADMINISTRATION'
+  INSERT INTO "portal_assignments" ("userId", "portal", "createdAt", "updatedAt")
+  SELECT u."id", 'ADMINISTRATION', NOW(), NOW()
   FROM "users" u WHERE u."email" = 'systemadmin@innovasci.com'
   ON CONFLICT ("userId") DO UPDATE SET "portal" = EXCLUDED."portal";
 
   -- Academic Director -> Academic portal
-  INSERT INTO "portal_assignments" ("userId", "portal")
-  SELECT u."id", 'ACADEMIC'
+  INSERT INTO "portal_assignments" ("userId", "portal", "createdAt", "updatedAt")
+  SELECT u."id", 'ACADEMIC', NOW(), NOW()
   FROM "users" u WHERE u."email" = 'directoracademic@innovasci.com'
   ON CONFLICT ("userId") DO UPDATE SET "portal" = EXCLUDED."portal";
 
   -- Head of Domain -> Academic portal
-  INSERT INTO "portal_assignments" ("userId", "portal")
-  SELECT u."id", 'ACADEMIC'
+  INSERT INTO "portal_assignments" ("userId", "portal", "createdAt", "updatedAt")
+  SELECT u."id", 'ACADEMIC', NOW(), NOW()
   FROM "users" u WHERE u."email" = 'head@innovasci.com'
   ON CONFLICT ("userId") DO UPDATE SET "portal" = EXCLUDED."portal";
 
   -- Category Lead -> Academic portal
-  INSERT INTO "portal_assignments" ("userId", "portal")
-  SELECT u."id", 'ACADEMIC'
+  INSERT INTO "portal_assignments" ("userId", "portal", "createdAt", "updatedAt")
+  SELECT u."id", 'ACADEMIC', NOW(), NOW()
   FROM "users" u WHERE u."email" = 'lead@innovasci.com'
   ON CONFLICT ("userId") DO UPDATE SET "portal" = EXCLUDED."portal";
 
   -- Instructor -> Instructor portal
-  INSERT INTO "portal_assignments" ("userId", "portal")
-  SELECT u."id", 'INSTRUCTOR'
+  INSERT INTO "portal_assignments" ("userId", "portal", "createdAt", "updatedAt")
+  SELECT u."id", 'INSTRUCTOR', NOW(), NOW()
   FROM "users" u WHERE u."email" = 'instructor@innovasci.com'
   ON CONFLICT ("userId") DO UPDATE SET "portal" = EXCLUDED."portal";
 
