@@ -223,99 +223,99 @@ END $$;
 -- ============================================
 -- INSERT DEFAULT ROLES
 -- ============================================
-INSERT INTO "roles" ("name", "displayName", "portal", "level", "description") VALUES
-  ('SUPER_ADMIN', 'Super Administrator', 'ADMINISTRATION', 100, 'Full platform access'),
-  ('SYSTEM_ADMIN', 'System Administrator', 'ADMINISTRATION', 90, 'Technical operations'),
-  ('ACADEMIC_DIRECTOR', 'Academic Director', 'ACADEMIC', 80, 'Academic governance'),
-  ('HEAD_OF_DOMAIN', 'Head of Domain', 'ACADEMIC', 70, 'Domain management'),
-  ('CATEGORY_LEAD', 'Category Lead', 'ACADEMIC', 60, 'Category management'),
-  ('INSTRUCTOR', 'Instructor', 'INSTRUCTOR', 50, 'Course instruction'),
-  ('STUDENT', 'Student', 'STUDENT', 10, 'Learning access')
+INSERT INTO "roles" ("id", "name", "displayName", "portal", "level", "description", "createdAt", "updatedAt") VALUES
+  (gen_random_uuid(), 'SUPER_ADMIN', 'Super Administrator', 'ADMINISTRATION', 100, 'Full platform access', NOW(), NOW()),
+  (gen_random_uuid(), 'SYSTEM_ADMIN', 'System Administrator', 'ADMINISTRATION', 90, 'Technical operations', NOW(), NOW()),
+  (gen_random_uuid(), 'ACADEMIC_DIRECTOR', 'Academic Director', 'ACADEMIC', 80, 'Academic governance', NOW(), NOW()),
+  (gen_random_uuid(), 'HEAD_OF_DOMAIN', 'Head of Domain', 'ACADEMIC', 70, 'Domain management', NOW(), NOW()),
+  (gen_random_uuid(), 'CATEGORY_LEAD', 'Category Lead', 'ACADEMIC', 60, 'Category management', NOW(), NOW()),
+  (gen_random_uuid(), 'INSTRUCTOR', 'Instructor', 'INSTRUCTOR', 50, 'Course instruction', NOW(), NOW()),
+  (gen_random_uuid(), 'STUDENT', 'Student', 'STUDENT', 10, 'Learning access', NOW(), NOW())
 ON CONFLICT ("name") DO NOTHING;
 
 -- ============================================
 -- INSERT DEFAULT PERMISSIONS
 -- ============================================
-INSERT INTO "permissions" ("name", "category", "description") VALUES
+INSERT INTO "permissions" ("id", "name", "category", "description", "createdAt", "updatedAt") VALUES
 -- Users
-('USERS_VIEW', 'USERS', 'View users'),
-('USERS_CREATE', 'USERS', 'Create users'),
-('USERS_UPDATE', 'USERS', 'Update users'),
-('USERS_DELETE', 'USERS', 'Delete users'),
-('USERS_MANAGE', 'USERS', 'Full user management'),
+(gen_random_uuid(), 'USERS_VIEW', 'USERS', 'View users', NOW(), NOW()),
+(gen_random_uuid(), 'USERS_CREATE', 'USERS', 'Create users', NOW(), NOW()),
+(gen_random_uuid(), 'USERS_UPDATE', 'USERS', 'Update users', NOW(), NOW()),
+(gen_random_uuid(), 'USERS_DELETE', 'USERS', 'Delete users', NOW(), NOW()),
+(gen_random_uuid(), 'USERS_MANAGE', 'USERS', 'Full user management', NOW(), NOW()),
 -- Domains
-('DOMAINS_VIEW', 'DOMAINS', 'View domains'),
-('DOMAINS_CREATE', 'DOMAINS', 'Create domains'),
-('DOMAINS_UPDATE', 'DOMAINS', 'Update domains'),
-('DOMAINS_DELETE', 'DOMAINS', 'Delete domains'),
-('DOMAINS_MANAGE', 'DOMAINS', 'Full domain management'),
-('DOMAINS_APPROVE', 'DOMAINS', 'Approve domains'),
+(gen_random_uuid(), 'DOMAINS_VIEW', 'DOMAINS', 'View domains', NOW(), NOW()),
+(gen_random_uuid(), 'DOMAINS_CREATE', 'DOMAINS', 'Create domains', NOW(), NOW()),
+(gen_random_uuid(), 'DOMAINS_UPDATE', 'DOMAINS', 'Update domains', NOW(), NOW()),
+(gen_random_uuid(), 'DOMAINS_DELETE', 'DOMAINS', 'Delete domains', NOW(), NOW()),
+(gen_random_uuid(), 'DOMAINS_MANAGE', 'DOMAINS', 'Full domain management', NOW(), NOW()),
+(gen_random_uuid(), 'DOMAINS_APPROVE', 'DOMAINS', 'Approve domains', NOW(), NOW()),
 -- Categories
-('CATEGORIES_VIEW', 'CATEGORIES', 'View categories'),
-('CATEGORIES_CREATE', 'CATEGORIES', 'Create categories'),
-('CATEGORIES_UPDATE', 'CATEGORIES', 'Update categories'),
-('CATEGORIES_DELETE', 'CATEGORIES', 'Delete categories'),
-('CATEGORIES_MANAGE', 'CATEGORIES', 'Full category management'),
-('CATEGORIES_APPROVE', 'CATEGORIES', 'Approve categories'),
+(gen_random_uuid(), 'CATEGORIES_VIEW', 'CATEGORIES', 'View categories', NOW(), NOW()),
+(gen_random_uuid(), 'CATEGORIES_CREATE', 'CATEGORIES', 'Create categories', NOW(), NOW()),
+(gen_random_uuid(), 'CATEGORIES_UPDATE', 'CATEGORIES', 'Update categories', NOW(), NOW()),
+(gen_random_uuid(), 'CATEGORIES_DELETE', 'CATEGORIES', 'Delete categories', NOW(), NOW()),
+(gen_random_uuid(), 'CATEGORIES_MANAGE', 'CATEGORIES', 'Full category management', NOW(), NOW()),
+(gen_random_uuid(), 'CATEGORIES_APPROVE', 'CATEGORIES', 'Approve categories', NOW(), NOW()),
 -- Courses
-('COURSES_VIEW', 'COURSES', 'View courses'),
-('COURSES_CREATE', 'COURSES', 'Create courses'),
-('COURSES_UPDATE', 'COURSES', 'Update courses'),
-('COURSES_DELETE', 'COURSES', 'Delete courses'),
-('COURSES_MANAGE', 'COURSES', 'Full course management'),
-('COURSES_PUBLISH', 'COURSES', 'Publish courses'),
-('COURSES_APPROVE', 'COURSES', 'Approve courses'),
+(gen_random_uuid(), 'COURSES_VIEW', 'COURSES', 'View courses', NOW(), NOW()),
+(gen_random_uuid(), 'COURSES_CREATE', 'COURSES', 'Create courses', NOW(), NOW()),
+(gen_random_uuid(), 'COURSES_UPDATE', 'COURSES', 'Update courses', NOW(), NOW()),
+(gen_random_uuid(), 'COURSES_DELETE', 'COURSES', 'Delete courses', NOW(), NOW()),
+(gen_random_uuid(), 'COURSES_MANAGE', 'COURSES', 'Full course management', NOW(), NOW()),
+(gen_random_uuid(), 'COURSES_PUBLISH', 'COURSES', 'Publish courses', NOW(), NOW()),
+(gen_random_uuid(), 'COURSES_APPROVE', 'COURSES', 'Approve courses', NOW(), NOW()),
 -- Projects
-('PROJECTS_VIEW', 'PROJECTS', 'View projects'),
-('PROJECTS_CREATE', 'PROJECTS', 'Create projects'),
-('PROJECTS_UPDATE', 'PROJECTS', 'Update projects'),
-('PROJECTS_DELETE', 'PROJECTS', 'Delete projects'),
-('PROJECTS_MANAGE', 'PROJECTS', 'Full project management'),
-('PROJECTS_REVIEW', 'PROJECTS', 'Review projects'),
-('PROJECTS_GRADE', 'PROJECTS', 'Grade projects'),
-('CAPSTONES_VIEW', 'PROJECTS', 'View capstones'),
-('CAPSTONES_REVIEW', 'PROJECTS', 'Review capstones'),
-('CAPSTONES_APPROVE', 'PROJECTS', 'Approve capstones'),
+(gen_random_uuid(), 'PROJECTS_VIEW', 'PROJECTS', 'View projects', NOW(), NOW()),
+(gen_random_uuid(), 'PROJECTS_CREATE', 'PROJECTS', 'Create projects', NOW(), NOW()),
+(gen_random_uuid(), 'PROJECTS_UPDATE', 'PROJECTS', 'Update projects', NOW(), NOW()),
+(gen_random_uuid(), 'PROJECTS_DELETE', 'PROJECTS', 'Delete projects', NOW(), NOW()),
+(gen_random_uuid(), 'PROJECTS_MANAGE', 'PROJECTS', 'Full project management', NOW(), NOW()),
+(gen_random_uuid(), 'PROJECTS_REVIEW', 'PROJECTS', 'Review projects', NOW(), NOW()),
+(gen_random_uuid(), 'PROJECTS_GRADE', 'PROJECTS', 'Grade projects', NOW(), NOW()),
+(gen_random_uuid(), 'CAPSTONES_VIEW', 'PROJECTS', 'View capstones', NOW(), NOW()),
+(gen_random_uuid(), 'CAPSTONES_REVIEW', 'PROJECTS', 'Review capstones', NOW(), NOW()),
+(gen_random_uuid(), 'CAPSTONES_APPROVE', 'PROJECTS', 'Approve capstones', NOW(), NOW()),
 -- Certificates
-('CERTIFICATES_VIEW', 'CERTIFICATES', 'View certificates'),
-('CERTIFICATES_MANAGE', 'CERTIFICATES', 'Full certificate management'),
+(gen_random_uuid(), 'CERTIFICATES_VIEW', 'CERTIFICATES', 'View certificates', NOW(), NOW()),
+(gen_random_uuid(), 'CERTIFICATES_MANAGE', 'CERTIFICATES', 'Full certificate management', NOW(), NOW()),
 -- System
-('SYSTEM_VIEW', 'SYSTEM', 'View system info'),
-('SYSTEM_MONITOR', 'SYSTEM', 'Monitor system'),
-('SYSTEM_CONFIGURE', 'SYSTEM', 'Configure system'),
-('SYSTEM_MANAGE', 'SYSTEM', 'Full system management'),
+(gen_random_uuid(), 'SYSTEM_VIEW', 'SYSTEM', 'View system info', NOW(), NOW()),
+(gen_random_uuid(), 'SYSTEM_MONITOR', 'SYSTEM', 'Monitor system', NOW(), NOW()),
+(gen_random_uuid(), 'SYSTEM_CONFIGURE', 'SYSTEM', 'Configure system', NOW(), NOW()),
+(gen_random_uuid(), 'SYSTEM_MANAGE', 'SYSTEM', 'Full system management', NOW(), NOW()),
 -- Storage
-('STORAGE_VIEW', 'STORAGE', 'View storage'),
-('STORAGE_UPLOAD', 'STORAGE', 'Upload to storage'),
-('STORAGE_DELETE', 'STORAGE', 'Delete from storage'),
-('STORAGE_MANAGE', 'STORAGE', 'Full storage management'),
+(gen_random_uuid(), 'STORAGE_VIEW', 'STORAGE', 'View storage', NOW(), NOW()),
+(gen_random_uuid(), 'STORAGE_UPLOAD', 'STORAGE', 'Upload to storage', NOW(), NOW()),
+(gen_random_uuid(), 'STORAGE_DELETE', 'STORAGE', 'Delete from storage', NOW(), NOW()),
+(gen_random_uuid(), 'STORAGE_MANAGE', 'STORAGE', 'Full storage management', NOW(), NOW()),
 -- Database
-('DATABASE_VIEW', 'DATABASE', 'View database'),
-('DATABASE_BACKUP', 'DATABASE', 'Backup database'),
-('DATABASE_RESTORE', 'DATABASE', 'Restore database'),
-('DATABASE_MANAGE', 'DATABASE', 'Full database management'),
+(gen_random_uuid(), 'DATABASE_VIEW', 'DATABASE', 'View database', NOW(), NOW()),
+(gen_random_uuid(), 'DATABASE_BACKUP', 'DATABASE', 'Backup database', NOW(), NOW()),
+(gen_random_uuid(), 'DATABASE_RESTORE', 'DATABASE', 'Restore database', NOW(), NOW()),
+(gen_random_uuid(), 'DATABASE_MANAGE', 'DATABASE', 'Full database management', NOW(), NOW()),
 -- Support
-('SUPPORT_VIEW', 'SUPPORT', 'View support tickets'),
-('SUPPORT_CREATE', 'SUPPORT', 'Create support tickets'),
-('SUPPORT_UPDATE', 'SUPPORT', 'Update support tickets'),
-('SUPPORT_MANAGE', 'SUPPORT', 'Full support management'),
+(gen_random_uuid(), 'SUPPORT_VIEW', 'SUPPORT', 'View support tickets', NOW(), NOW()),
+(gen_random_uuid(), 'SUPPORT_CREATE', 'SUPPORT', 'Create support tickets', NOW(), NOW()),
+(gen_random_uuid(), 'SUPPORT_UPDATE', 'SUPPORT', 'Update support tickets', NOW(), NOW()),
+(gen_random_uuid(), 'SUPPORT_MANAGE', 'SUPPORT', 'Full support management', NOW(), NOW()),
 -- Portal
-('PORTAL_VIEW', 'PORTAL', 'View portal'),
-('PORTAL_MANAGE', 'PORTAL', 'Full portal management'),
+(gen_random_uuid(), 'PORTAL_VIEW', 'PORTAL', 'View portal', NOW(), NOW()),
+(gen_random_uuid(), 'PORTAL_MANAGE', 'PORTAL', 'Full portal management', NOW(), NOW()),
 -- Analytics
-('ANALYTICS_VIEW', 'ANALYTICS', 'View analytics'),
-('ANALYTICS_EXPORT', 'ANALYTICS', 'Export analytics'),
+(gen_random_uuid(), 'ANALYTICS_VIEW', 'ANALYTICS', 'View analytics', NOW(), NOW()),
+(gen_random_uuid(), 'ANALYTICS_EXPORT', 'ANALYTICS', 'Export analytics', NOW(), NOW()),
 -- Content
-('CONTENT_VIEW', 'CONTENT', 'View content'),
-('CONTENT_CREATE', 'CONTENT', 'Create content'),
-('CONTENT_UPDATE', 'CONTENT', 'Update content'),
-('CONTENT_DELETE', 'CONTENT', 'Delete content'),
-('CONTENT_MANAGE', 'CONTENT', 'Full content management'),
+(gen_random_uuid(), 'CONTENT_VIEW', 'CONTENT', 'View content', NOW(), NOW()),
+(gen_random_uuid(), 'CONTENT_CREATE', 'CONTENT', 'Create content', NOW(), NOW()),
+(gen_random_uuid(), 'CONTENT_UPDATE', 'CONTENT', 'Update content', NOW(), NOW()),
+(gen_random_uuid(), 'CONTENT_DELETE', 'CONTENT', 'Delete content', NOW(), NOW()),
+(gen_random_uuid(), 'CONTENT_MANAGE', 'CONTENT', 'Full content management', NOW(), NOW()),
 -- Enrollments
-('ENROLLMENTS_VIEW', 'ENROLLMENTS', 'View enrollments'),
-('ENROLLMENTS_CREATE', 'ENROLLMENTS', 'Create enrollments'),
-('ENROLLMENTS_UPDATE', 'ENROLLMENTS', 'Update enrollments'),
-('ENROLLMENTS_MANAGE', 'ENROLLMENTS', 'Full enrollment management')
+(gen_random_uuid(), 'ENROLLMENTS_VIEW', 'ENROLLMENTS', 'View enrollments', NOW(), NOW()),
+(gen_random_uuid(), 'ENROLLMENTS_CREATE', 'ENROLLMENTS', 'Create enrollments', NOW(), NOW()),
+(gen_random_uuid(), 'ENROLLMENTS_UPDATE', 'ENROLLMENTS', 'Update enrollments', NOW(), NOW()),
+(gen_random_uuid(), 'ENROLLMENTS_MANAGE', 'ENROLLMENTS', 'Full enrollment management', NOW(), NOW())
 ON CONFLICT ("name") DO NOTHING;
 
 -- ============================================
