@@ -108,38 +108,38 @@ BEGIN
   -- ============================================
 
   -- Super Admin role
-  INSERT INTO "user_roles" ("userId", "roleId", "createdAt")
-  SELECT u."id", super_admin_id, NOW()
+  INSERT INTO "user_roles" ("userId", "roleId", "createdAt", "updatedAt")
+  SELECT u."id", super_admin_id, NOW(), NOW()
   FROM "users" u WHERE u."email" = 'super@innovasci.com'
   ON CONFLICT ("userId", "roleId") DO NOTHING;
 
   -- System Admin role
-  INSERT INTO "user_roles" ("userId", "roleId", "createdAt")
-  SELECT u."id", system_admin_id, NOW()
+  INSERT INTO "user_roles" ("userId", "roleId", "createdAt", "updatedAt")
+  SELECT u."id", system_admin_id, NOW(), NOW()
   FROM "users" u WHERE u."email" = 'systemadmin@innovasci.com'
   ON CONFLICT ("userId", "roleId") DO NOTHING;
 
   -- Academic Director role
-  INSERT INTO "user_roles" ("userId", "roleId", "createdAt")
-  SELECT u."id", academic_director_id, NOW()
+  INSERT INTO "user_roles" ("userId", "roleId", "createdAt", "updatedAt")
+  SELECT u."id", academic_director_id, NOW(), NOW()
   FROM "users" u WHERE u."email" = 'directoracademic@innovasci.com'
   ON CONFLICT ("userId", "roleId") DO NOTHING;
 
   -- Head of Domain role
-  INSERT INTO "user_roles" ("userId", "roleId", "createdAt")
-  SELECT u."id", head_of_domain_id, NOW()
+  INSERT INTO "user_roles" ("userId", "roleId", "createdAt", "updatedAt")
+  SELECT u."id", head_of_domain_id, NOW(), NOW()
   FROM "users" u WHERE u."email" = 'head@innovasci.com'
   ON CONFLICT ("userId", "roleId") DO NOTHING;
 
   -- Category Lead role
-  INSERT INTO "user_roles" ("userId", "roleId", "createdAt")
-  SELECT u."id", category_lead_id, NOW()
+  INSERT INTO "user_roles" ("userId", "roleId", "createdAt", "updatedAt")
+  SELECT u."id", category_lead_id, NOW(), NOW()
   FROM "users" u WHERE u."email" = 'lead@innovasci.com'
   ON CONFLICT ("userId", "roleId") DO NOTHING;
 
   -- Instructor role
-  INSERT INTO "user_roles" ("userId", "roleId", "createdAt")
-  SELECT u."id", instructor_id, NOW()
+  INSERT INTO "user_roles" ("userId", "roleId", "createdAt", "updatedAt")
+  SELECT u."id", instructor_id, NOW(), NOW()
   FROM "users" u WHERE u."email" = 'instructor@innovasci.com'
   ON CONFLICT ("userId", "roleId") DO NOTHING;
 
