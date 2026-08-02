@@ -111,11 +111,11 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 -- ============================================
 
 -- Insert sample plans
-INSERT INTO plans (id, name, description, "planType", "billingCycle", "purchaseScope", "pricingMode", features, "isActive", "isFeatured")
+INSERT INTO plans (id, name, description, "planType", "billingCycle", "purchaseScope", "pricingMode", features, "isActive", "isFeatured", "createdAt", "updatedAt")
 VALUES 
-    (gen_random_uuid(), 'Free', 'Access to free courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to free courses", "Community forum access", "Basic support"]'::jsonb, true, false),
-    (gen_random_uuid(), 'Basic', 'Access to all courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "Priority support", "Certificates"]'::jsonb, true, false),
-    (gen_random_uuid(), 'Pro', 'Premium learning experience', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "1-on-1 mentorship", "Priority support", "Premium certificates", "Learning paths"]'::jsonb, true, true)
+    (gen_random_uuid(), 'Free', 'Access to free courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to free courses", "Community forum access", "Basic support"]'::jsonb, true, false, NOW(), NOW()),
+    (gen_random_uuid(), 'Basic', 'Access to all courses', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "Priority support", "Certificates"]'::jsonb, true, false, NOW(), NOW()),
+    (gen_random_uuid(), 'Pro', 'Premium learning experience', 'subscription', 'monthly', 'CATEGORY', 'MANUAL', '["Access to all courses", "Downloadable resources", "1-on-1 mentorship", "Priority support", "Premium certificates", "Learning paths"]'::jsonb, true, true, NOW(), NOW())
 ON CONFLICT DO NOTHING;
 
 -- ============================================
