@@ -150,38 +150,75 @@ CREATE TABLE IF NOT EXISTS "course_assignments" (
 );
 
 -- ============================================
--- ADD FOREIGN KEYS
+-- ADD FOREIGN KEYS (idempotent)
 -- ============================================
 
--- role_permissions
-ALTER TABLE "role_permissions" ADD CONSTRAINT "role_permissions_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "role_permissions" ADD CONSTRAINT "role_permissions_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "permissions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+DO $$
+BEGIN
+  -- role_permissions
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'role_permissions_roleId_fkey') THEN
+    ALTER TABLE "role_permissions" ADD CONSTRAINT "role_permissions_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'role_permissions_permissionId_fkey') THEN
+    ALTER TABLE "role_permissions" ADD CONSTRAINT "role_permissions_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "permissions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- user_roles
-ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- user_roles
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_roles_userId_fkey') THEN
+    ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_roles_roleId_fkey') THEN
+    ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- policy_rules
-ALTER TABLE "policy_rules" ADD CONSTRAINT "policy_rules_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- policy_rules
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'policy_rules_policyId_fkey') THEN
+    ALTER TABLE "policy_rules" ADD CONSTRAINT "policy_rules_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- user_policies
-ALTER TABLE "user_policies" ADD CONSTRAINT "user_policies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "user_policies" ADD CONSTRAINT "user_policies_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- user_policies
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_policies_userId_fkey') THEN
+    ALTER TABLE "user_policies" ADD CONSTRAINT "user_policies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_policies_policyId_fkey') THEN
+    ALTER TABLE "user_policies" ADD CONSTRAINT "user_policies_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "policies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- portal_assignments
-ALTER TABLE "portal_assignments" ADD CONSTRAINT "portal_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- portal_assignments
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'portal_assignments_userId_fkey') THEN
+    ALTER TABLE "portal_assignments" ADD CONSTRAINT "portal_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- domain_assignments
-ALTER TABLE "domain_assignments" ADD CONSTRAINT "domain_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "domain_assignments" ADD CONSTRAINT "domain_assignments_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- domain_assignments
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'domain_assignments_userId_fkey') THEN
+    ALTER TABLE "domain_assignments" ADD CONSTRAINT "domain_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'domain_assignments_domainId_fkey') THEN
+    ALTER TABLE "domain_assignments" ADD CONSTRAINT "domain_assignments_domainId_fkey" FOREIGN KEY ("domainId") REFERENCES "domains"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- category_assignments
-ALTER TABLE "category_assignments" ADD CONSTRAINT "category_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "category_assignments" ADD CONSTRAINT "category_assignments_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- category_assignments
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'category_assignments_userId_fkey') THEN
+    ALTER TABLE "category_assignments" ADD CONSTRAINT "category_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'category_assignments_categoryId_fkey') THEN
+    ALTER TABLE "category_assignments" ADD CONSTRAINT "category_assignments_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
 
--- course_assignments
-ALTER TABLE "course_assignments" ADD CONSTRAINT "course_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "course_assignments" ADD CONSTRAINT "course_assignments_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  -- course_assignments
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'course_assignments_userId_fkey') THEN
+    ALTER TABLE "course_assignments" ADD CONSTRAINT "course_assignments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'course_assignments_courseId_fkey') THEN
+    ALTER TABLE "course_assignments" ADD CONSTRAINT "course_assignments_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+END $$;
 
 -- ============================================
 -- INSERT DEFAULT ROLES
