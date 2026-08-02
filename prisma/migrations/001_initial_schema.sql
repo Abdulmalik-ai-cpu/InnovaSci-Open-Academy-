@@ -44,7 +44,7 @@ CREATE TABLE users (
     "passwordHash" VARCHAR(255),
     role VARCHAR(50) DEFAULT 'STUDENT',
     status VARCHAR(50) DEFAULT 'ACTIVE',
-    "emailVerified" BOOLEAN DEFAULT false,
+    "emailVerified" TIMESTAMP,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

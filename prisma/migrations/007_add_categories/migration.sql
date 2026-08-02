@@ -4,7 +4,7 @@
 
 -- Create categories table (if not exists)
 CREATE TABLE IF NOT EXISTS "categories" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "description" TEXT,
@@ -22,7 +22,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS "categories_name_key" ON "categories"("name");
 CREATE UNIQUE INDEX IF NOT EXISTS "categories_slug_key" ON "categories"("slug");
 
 -- Add categoryId to courses table (nullable, with FK)
-ALTER TABLE "courses" ADD COLUMN IF NOT EXISTS "categoryId" UUID;
+ALTER TABLE "courses" ADD COLUMN IF NOT EXISTS "categoryId" TEXT;
 
 -- Add foreign key constraint (if not exists)
 DO $$

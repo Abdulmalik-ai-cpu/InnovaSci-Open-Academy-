@@ -1,10 +1,10 @@
 -- Create forum_threads table
 CREATE TABLE IF NOT EXISTS "forum_threads" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "title" VARCHAR(255) NOT NULL,
     "content" TEXT NOT NULL,
     "category" VARCHAR(50) NOT NULL DEFAULT 'general',
-    "authorId" UUID NOT NULL,
+    "authorId" TEXT NOT NULL,
     "isPinned" BOOLEAN NOT NULL DEFAULT false,
     "isResolved" BOOLEAN NOT NULL DEFAULT false,
     "viewCount" INTEGER NOT NULL DEFAULT 0,
@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS "forum_threads" (
 
 -- Create forum_replies table
 CREATE TABLE IF NOT EXISTS "forum_replies" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "content" TEXT NOT NULL,
-    "authorId" UUID NOT NULL,
-    "threadId" UUID NOT NULL,
+    "authorId" TEXT NOT NULL,
+    "threadId" TEXT NOT NULL,
     "isAccepted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -11,19 +11,19 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
-    "db:seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
-    "db:seed-rbac": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-rbac.ts",
-    "db:seed-categories": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-categories.ts",
-    "db:seed-gateways": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-payment-gateways.ts",
-    "db:seed-forum": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-forum.ts",
-    "db:seed-drug-discovery": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-python-drug-discovery.ts",
+    "db:seed": "npx ts-node --project tsconfig.seed.json prisma/seed.ts",
+    "db:seed-rbac": "npx ts-node --project tsconfig.seed.json prisma/seed-rbac.ts",
+    "db:seed-categories": "npx ts-node --project tsconfig.seed.json prisma/seed-categories.ts",
+    "db:seed-gateways": "npx ts-node --project tsconfig.seed.json prisma/seed-payment-gateways.ts",
+    "db:seed-forum": "npx ts-node --project tsconfig.seed.json prisma/seed-forum.ts",
+    "db:seed-drug-discovery": "npx ts-node --project tsconfig.seed.json prisma/seed-python-drug-discovery.ts",
     "db:seed-all": "npm-run-all --sequential db:seed db:seed-rbac db:seed-categories db:seed-gateways db:seed-forum db:seed-drug-discovery",
-    "db:setup": "npm run db:migrate && npm run db:seed-all",
+    "db:setup": "bash scripts/db-setup.sh",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"
   },
   "prisma": {
-    "seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "npx ts-node --project tsconfig.seed.json prisma/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1075.0",

@@ -3,8 +3,8 @@
 
 -- Mini Projects table
 CREATE TABLE IF NOT EXISTS "mini_projects" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "scenario" TEXT,
@@ -25,7 +25,7 @@ CREATE INDEX IF NOT EXISTS "mini_projects_courseId_idx" ON "mini_projects"("cour
 
 -- Difficulty Level Capstones table
 CREATE TABLE IF NOT EXISTS "difficulty_level_capstones" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     "title" VARCHAR(255) NOT NULL,
     "slug" VARCHAR(255) UNIQUE NOT NULL,
     "description" TEXT,
@@ -40,7 +40,7 @@ CREATE INDEX IF NOT EXISTS "difficulty_level_capstones_difficultyLevel_idx" ON "
 
 -- Professional Capstones table
 CREATE TABLE IF NOT EXISTS "professional_capstones" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     "title" VARCHAR(255) NOT NULL,
     "slug" VARCHAR(255) UNIQUE NOT NULL,
     "description" TEXT,
@@ -55,10 +55,10 @@ CREATE TABLE IF NOT EXISTS "professional_capstones" (
 
 -- Capstone Enrollments table
 CREATE TABLE IF NOT EXISTS "capstone_enrollments" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL,
-    "difficultyLevelCapstoneId" UUID,
-    "professionalCapstoneId" UUID,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL,
+    "difficultyLevelCapstoneId" TEXT,
+    "professionalCapstoneId" TEXT,
     "status" VARCHAR(50) DEFAULT 'NOT_STARTED',
     "progress" INTEGER DEFAULT 0,
     "enrolledAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -73,8 +73,8 @@ CREATE INDEX IF NOT EXISTS "capstone_enrollments_userId_idx" ON "capstone_enroll
 
 -- Course Learning Outcomes table
 CREATE TABLE IF NOT EXISTS "course_learning_outcomes" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "outcome" TEXT NOT NULL,
     "orderIndex" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -84,8 +84,8 @@ CREATE INDEX IF NOT EXISTS "course_learning_outcomes_courseId_idx" ON "course_le
 
 -- Course Objectives table
 CREATE TABLE IF NOT EXISTS "course_objectives" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "objective" TEXT NOT NULL,
     "orderIndex" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -95,8 +95,8 @@ CREATE INDEX IF NOT EXISTS "course_objectives_courseId_idx" ON "course_objective
 
 -- Course Resources table
 CREATE TABLE IF NOT EXISTS "course_resources" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "type" VARCHAR(50),
     "url" TEXT,
@@ -107,8 +107,8 @@ CREATE INDEX IF NOT EXISTS "course_resources_courseId_idx" ON "course_resources"
 
 -- Course Software table
 CREATE TABLE IF NOT EXISTS "course_software" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "version" VARCHAR(100),
     "url" TEXT,
@@ -119,8 +119,8 @@ CREATE INDEX IF NOT EXISTS "course_software_courseId_idx" ON "course_software"("
 
 -- Course Datasets table
 CREATE TABLE IF NOT EXISTS "course_datasets" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "url" TEXT,
@@ -131,9 +131,9 @@ CREATE INDEX IF NOT EXISTS "course_datasets_courseId_idx" ON "course_datasets"("
 
 -- Prerequisites table
 CREATE TABLE IF NOT EXISTS "prerequisites" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
-    "prerequisiteCourseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
+    "prerequisiteCourseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ALTER TABLE "prerequisites" ADD CONSTRAINT "prerequisites_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE CASCADE;
@@ -141,8 +141,8 @@ CREATE INDEX IF NOT EXISTS "prerequisites_courseId_idx" ON "prerequisites"("cour
 
 -- Career Outcomes table
 CREATE TABLE IF NOT EXISTS "career_outcomes" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "courseId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "courseId" TEXT NOT NULL,
     "outcome" TEXT NOT NULL,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -151,8 +151,8 @@ CREATE INDEX IF NOT EXISTS "career_outcomes_courseId_idx" ON "career_outcomes"("
 
 -- Instructors table
 CREATE TABLE IF NOT EXISTS "instructors" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT,
     "title" VARCHAR(255),
     "bio" TEXT,
     "expertise" TEXT[],
@@ -163,8 +163,8 @@ ALTER TABLE "instructors" ADD CONSTRAINT "instructors_userId_fkey" FOREIGN KEY (
 
 -- Practical Exercises table
 CREATE TABLE IF NOT EXISTS "practical_exercises" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "lessonId" UUID,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "lessonId" TEXT,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "instructions" TEXT,
@@ -181,11 +181,11 @@ CREATE INDEX IF NOT EXISTS "practical_exercises_lessonId_idx" ON "practical_exer
 
 -- Project Rubrics table
 CREATE TABLE IF NOT EXISTS "project_rubrics" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     "name" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "type" VARCHAR(50) DEFAULT 'MINI_PROJECT',
-    "courseId" UUID,
+    "courseId" TEXT,
     "difficultyLevel" VARCHAR(50),
     "criteria" JSONB NOT NULL DEFAULT '[]',
     "isActive" BOOLEAN DEFAULT true,
@@ -198,10 +198,10 @@ CREATE INDEX IF NOT EXISTS "project_rubrics_type_idx" ON "project_rubrics"("type
 
 -- Project Submissions table
 CREATE TABLE IF NOT EXISTS "project_submissions" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL,
-    "courseId" UUID,
-    "miniProjectId" UUID,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL,
+    "courseId" TEXT,
+    "miniProjectId" TEXT,
     "capstoneId" TEXT,
     "capstoneType" TEXT,
     "title" VARCHAR(255) NOT NULL,
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS "project_submissions" (
     "projectType" VARCHAR(50) DEFAULT 'MINI_PROJECT',
     "grade" INTEGER,
     "gradeType" VARCHAR(50),
-    "rubricId" UUID,
+    "rubricId" TEXT,
     "rubricScore" DECIMAL(10, 2) DEFAULT 0,
     "maxScore" DECIMAL(10, 2) DEFAULT 100,
     "feedback" TEXT,
@@ -235,8 +235,8 @@ CREATE INDEX IF NOT EXISTS "project_submissions_projectType_idx" ON "project_sub
 
 -- Submission Versions table
 CREATE TABLE IF NOT EXISTS "submission_versions" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "submissionId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "submissionId" TEXT NOT NULL,
     "versionNumber" INTEGER NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
@@ -257,10 +257,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS "submission_versions_submissionId_versionNumbe
 
 -- Project Reviews table
 CREATE TABLE IF NOT EXISTS "project_reviews" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "submissionId" UUID NOT NULL,
-    "versionId" UUID,
-    "reviewerId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "submissionId" TEXT NOT NULL,
+    "versionId" TEXT,
+    "reviewerId" TEXT NOT NULL,
     "decision" VARCHAR(50) NOT NULL,
     "overallFeedback" TEXT,
     "reviewedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -275,8 +275,8 @@ CREATE INDEX IF NOT EXISTS "project_reviews_submissionId_idx" ON "project_review
 
 -- Project Feedback table
 CREATE TABLE IF NOT EXISTS "project_feedback" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "reviewId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "reviewId" TEXT NOT NULL,
     "category" VARCHAR(50) NOT NULL,
     "title" VARCHAR(255),
     "content" TEXT NOT NULL,
@@ -291,9 +291,9 @@ CREATE INDEX IF NOT EXISTS "project_feedback_reviewId_idx" ON "project_feedback"
 
 -- Project Scores table
 CREATE TABLE IF NOT EXISTS "project_scores" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "reviewId" UUID NOT NULL,
-    "rubricId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "reviewId" TEXT NOT NULL,
+    "rubricId" TEXT NOT NULL,
     "criteriaName" VARCHAR(255) NOT NULL,
     "pointsAwarded" DECIMAL(10, 2) DEFAULT 0,
     "maxPoints" DECIMAL(10, 2) NOT NULL,
@@ -306,8 +306,8 @@ CREATE INDEX IF NOT EXISTS "project_scores_reviewId_idx" ON "project_scores"("re
 
 -- Project Status History table
 CREATE TABLE IF NOT EXISTS "project_status_history" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "submissionId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "submissionId" TEXT NOT NULL,
     "previousStatus" VARCHAR(50),
     "newStatus" VARCHAR(50) NOT NULL,
     "changedBy" VARCHAR(255) NOT NULL,
@@ -319,9 +319,9 @@ CREATE INDEX IF NOT EXISTS "project_status_history_submissionId_idx" ON "project
 
 -- Reviewer Assignments table
 CREATE TABLE IF NOT EXISTS "reviewer_assignments" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "submissionId" UUID NOT NULL,
-    "reviewerId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "submissionId" TEXT NOT NULL,
+    "reviewerId" TEXT NOT NULL,
     "assignedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "assignedBy" VARCHAR(255),
     "dueDate" TIMESTAMP,
@@ -337,14 +337,14 @@ CREATE INDEX IF NOT EXISTS "reviewer_assignments_status_idx" ON "reviewer_assign
 
 -- Project Comments table
 CREATE TABLE IF NOT EXISTS "project_comments" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "submissionId" UUID NOT NULL,
-    "authorId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "submissionId" TEXT NOT NULL,
+    "authorId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "isInternal" BOOLEAN DEFAULT false,
     "referenceType" VARCHAR(50),
     "referenceId" TEXT,
-    "parentId" UUID,
+    "parentId" TEXT,
     "isResolved" BOOLEAN DEFAULT false,
     "resolvedBy" VARCHAR(255),
     "resolvedAt" TIMESTAMP,
@@ -358,8 +358,8 @@ CREATE INDEX IF NOT EXISTS "project_comments_authorId_idx" ON "project_comments"
 
 -- Portfolio Entries table
 CREATE TABLE IF NOT EXISTS "portfolio_entries" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "userId" TEXT NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "liveUrl" TEXT,
@@ -371,9 +371,9 @@ CREATE TABLE IF NOT EXISTS "portfolio_entries" (
     "rationale" TEXT,
     "visibility" VARCHAR(50) DEFAULT 'PRIVATE',
     "publicSlug" VARCHAR(255) UNIQUE,
-    "linkedCourseId" UUID,
-    "linkedMiniProjectId" UUID,
-    "linkedCapstoneId" UUID,
+    "linkedCourseId" TEXT,
+    "linkedMiniProjectId" TEXT,
+    "linkedCapstoneId" TEXT,
     "isPublished" BOOLEAN DEFAULT false,
     "viewCount" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

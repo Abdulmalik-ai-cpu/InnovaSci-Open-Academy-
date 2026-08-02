@@ -6,7 +6,7 @@
 -- Create domains table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "domains" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "name" VARCHAR NOT NULL,
     "shortName" VARCHAR,
     "slug" VARCHAR NOT NULL,
@@ -39,7 +39,7 @@ CREATE INDEX IF NOT EXISTS "domains_isFeatured_idx" ON "domains"("isFeatured");
 -- ============================================
 -- Update categories table with domain relationship
 -- ============================================
-ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "domainId" UUID;
+ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "domainId" TEXT;
 ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "thumbnailUrl" VARCHAR;
 ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "bannerUrl" VARCHAR;
 ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "status" VARCHAR NOT NULL DEFAULT 'ACTIVE';

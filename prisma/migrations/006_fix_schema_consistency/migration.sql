@@ -171,7 +171,7 @@ DECLARE
 BEGIN
     SELECT COUNT(*) INTO path_count FROM learning_paths;
     IF path_count = 0 THEN
-        INSERT INTO learning_paths (title, slug, subtitle, description, difficultyLevel, estimatedHours, "isActive", "isPublished")
+        INSERT INTO learning_paths (title, slug, subtitle, description, "difficultyLevel", "estimatedHours", "isActive", "isPublished")
         VALUES 
             ('Data Science Foundations', 'data-science-foundations', 'Master data science', 'Learn data analysis, visualization, ML basics', 'beginner', 40, true, true),
             ('Web Development Mastery', 'web-development-mastery', 'Build web apps', 'Full-stack web development with React', 'intermediate', 60, true, true),

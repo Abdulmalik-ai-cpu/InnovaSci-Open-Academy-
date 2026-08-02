@@ -5,7 +5,7 @@
 -- Payment Gateways Table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "payment_gateways" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     "name" VARCHAR(255) NOT NULL UNIQUE,
     "provider" VARCHAR(100) NOT NULL,
     "slug" VARCHAR(100) NOT NULL UNIQUE,
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS "payment_gateways" (
 -- Gateway Configurations Table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "gateway_configurations" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "gatewayId" UUID NOT NULL REFERENCES "payment_gateways"("id") ON DELETE CASCADE,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "gatewayId" TEXT NOT NULL REFERENCES "payment_gateways"("id") ON DELETE CASCADE,
     "country" VARCHAR(10) NOT NULL,
     "countryName" VARCHAR(255) NOT NULL,
     "currency" VARCHAR(10) NOT NULL,
@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS "gateway_configurations" (
 -- Payment Transactions Table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "payment_transactions" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "gatewayId" UUID NOT NULL REFERENCES "payment_gateways"("id"),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "gatewayId" TEXT NOT NULL REFERENCES "payment_gateways"("id"),
     "reference" VARCHAR(255) NOT NULL UNIQUE,
     "gatewayRef" VARCHAR(255),
     "userId" VARCHAR(255),
@@ -94,8 +94,8 @@ CREATE INDEX IF NOT EXISTS "payment_transactions_createdAt_idx" ON "payment_tran
 -- Payment Gateway Logs Table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "payment_gateway_logs" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "gatewayId" UUID NOT NULL REFERENCES "payment_gateways"("id") ON DELETE CASCADE,
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+    "gatewayId" TEXT NOT NULL REFERENCES "payment_gateways"("id") ON DELETE CASCADE,
     "transactionId" VARCHAR(255),
     "logType" VARCHAR(50) NOT NULL,
     "level" VARCHAR(20) DEFAULT 'info',
@@ -120,7 +120,7 @@ CREATE INDEX IF NOT EXISTS "payment_gateway_logs_createdAt_idx" ON "payment_gate
 -- Exchange Rates Table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "exchange_rates" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     "fromCurrency" VARCHAR(10) NOT NULL,
     "toCurrency" VARCHAR(10) NOT NULL,
     "rate" DECIMAL(20, 10) NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS "exchange_rates" (
 -- Payment Settings Table
 -- ============================================
 CREATE TABLE IF NOT EXISTS "payment_settings" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
     "defaultGatewayId" VARCHAR(255),
     "defaultCurrency" VARCHAR(10) DEFAULT 'USD',
     "supportedCurrencies" TEXT[] DEFAULT '{"USD","NGN","EUR","GBP"}',
