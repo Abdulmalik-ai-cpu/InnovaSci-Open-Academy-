@@ -14,7 +14,8 @@
     "db:seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
     "db:seed-drug-discovery": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-python-drug-discovery.ts",
     "db:seed-gateways": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-payment-gateways.ts",
-    "db:seed-all": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed-payment-gateways.ts",
+    "db:seed-all": "npm-run-all --sequential db:seed db:seed-gateways db:seed-drug-discovery",
+    "db:setup": "npm run db:migrate && npm run db:seed-all",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"
   },
@@ -73,6 +74,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.38",
     "prisma": "^5.22.0",
     "tailwindcss": "^3.4.3",
