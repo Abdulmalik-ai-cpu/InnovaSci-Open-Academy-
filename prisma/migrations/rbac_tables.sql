@@ -323,31 +323,31 @@ ON CONFLICT ("name") DO NOTHING;
 -- ============================================
 
 -- Super Admin gets ALL permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'SUPER_ADMIN'
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 
 -- System Admin permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'SYSTEM_ADMIN'
 AND p."category" IN ('SYSTEM', 'STORAGE', 'DATABASE', 'SUPPORT', 'PORTAL', 'ANALYTICS')
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 
 -- Academic Director permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'ACADEMIC_DIRECTOR'
 AND p."category" IN ('DOMAINS', 'CATEGORIES', 'COURSES', 'PROJECTS', 'CONTENT', 'ENROLLMENTS', 'ANALYTICS', 'CERTIFICATES')
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 
 -- Head of Domain permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'HEAD_OF_DOMAIN'
 AND p."name" IN (
@@ -361,8 +361,8 @@ AND p."name" IN (
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 
 -- Category Lead permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'CATEGORY_LEAD'
 AND p."name" IN (
@@ -376,8 +376,8 @@ AND p."name" IN (
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 
 -- Instructor permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'INSTRUCTOR'
 AND p."name" IN (
@@ -389,8 +389,8 @@ AND p."name" IN (
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 
 -- Student permissions
-INSERT INTO "role_permissions" ("roleId", "permissionId")
-SELECT r."id", p."id"
+INSERT INTO "role_permissions" ("roleId", "permissionId", "createdAt")
+SELECT r."id", p."id", NOW()
 FROM "roles" r, "permissions" p
 WHERE r."name" = 'STUDENT'
 AND p."name" IN ('COURSES_VIEW', 'ENROLLMENTS_VIEW', 'PROJECTS_VIEW')
