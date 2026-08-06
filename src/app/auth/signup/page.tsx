@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 import { motion } from "framer-motion"
 import { Mail, Lock, Eye, EyeOff, User, AlertCircle, Loader2, Globe, Phone, MapPin, ChevronDown } from "lucide-react"
 import { AcademyLogo } from "@/components/layout/logo"
@@ -180,7 +181,20 @@ export default function SignupPage() {
         return
       }
 
-      // Success - redirect to dashboard
+      // Establish the NextAuth session immediately after account creation.
+      // Without this, middleware correctly treats the new user as anonymous
+      // and redirects the user back to the login page.
+      const loginResult = await signIn("credentials", {
+        email: email.trim().toLowerCase(),
+        password,
+        redirect: false,
+      })
+
+      if (loginResult?.error || !loginResult?.ok) {
+        router.push("/auth/login?registered=true")
+        return
+      }
+
       router.push("/dashboard")
       router.refresh()
     } catch (err) {

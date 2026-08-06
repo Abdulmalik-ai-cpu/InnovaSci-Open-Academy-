@@ -88,6 +88,30 @@ export async function POST(request: NextRequest) {
 
       console.log("[Register] User created:", user.id)
 
+      // Keep new accounts aligned with the migrated RBAC model. The scalar
+      // role remains the compatibility fallback, while these relations power
+      // permissions and portal-aware authorization for seeded environments.
+      const studentRole = await prisma.role.findUnique({
+        where: { name: "STUDENT" },
+      })
+
+      if (studentRole) {
+        await prisma.userRole.create({
+          data: {
+            userId: user.id,
+            roleId: studentRole.id,
+            isActive: true,
+          },
+        })
+      }
+
+      await prisma.portalAssignment.create({
+        data: {
+          userId: user.id,
+          portal: "STUDENT",
+        },
+      })
+
       // Create profile
       await prisma.profile.create({
         data: {
