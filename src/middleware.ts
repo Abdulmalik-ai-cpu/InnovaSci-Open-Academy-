@@ -45,6 +45,9 @@ const PUBLIC_ROUTES = [
 const EXEMPT_PATHS = [
   "/maintenance",
   "/api/auth",
+  "/api/diagnostic",
+  "/api/health",
+  "/api/public",
   "/_next",
   "/favicon.ico",
   "/robots.txt",
