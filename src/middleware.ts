@@ -48,6 +48,7 @@ const EXEMPT_PATHS = [
   "/api/diagnostic",
   "/api/health",
   "/api/public",
+  "/api/seed",
   "/_next",
   "/favicon.ico",
   "/robots.txt",
