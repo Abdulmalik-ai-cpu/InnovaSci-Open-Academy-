@@ -1,8 +1,11 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { prisma } from "@/lib/prisma"
-import bcrypt from "bcryptjs"
-import { ROLES, ROLE_PORTAL_MAP, ROLE_DEFAULT_REDIRECT } from "@/lib/rbac/roles"
+import { createClient } from "@supabase/supabase-js"
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+)
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -19,57 +22,47 @@ export const authOptions: NextAuthOptions = {
 
         const normalizedEmail = credentials.email.toLowerCase().trim()
 
-        // Prisma database authentication with bcrypt
         try {
-          const prismaUser = await prisma.user.findFirst({
-            where: { email: normalizedEmail },
-            include: { 
-              profile: true,
-              userRoles: {
-                where: { isActive: true },
-                include: {
-                  role: {
-                    include: {
-                      permissions: {
-                        include: { permission: true },
-                      },
-                    },
-                  },
-                },
-                orderBy: { role: { level: 'desc' } },
-                take: 1,
-              },
-              portalAssignment: true,
-            }
+          // Use Supabase Auth for authentication
+          const { data: authData, error: authError } = await supabaseAdmin.auth.signInWithPassword({
+            email: normalizedEmail,
+            password: credentials.password,
           })
 
-          if (prismaUser && prismaUser.passwordHash) {
-            const isValid = await bcrypt.compare(credentials.password, prismaUser.passwordHash)
-            if (isValid) {
-              // Get primary role
-              const primaryRole = prismaUser.userRoles[0]?.role?.name as string || ROLES.STUDENT
-              const portal = prismaUser.portalAssignment?.portal || ROLE_PORTAL_MAP[primaryRole as keyof typeof ROLE_PORTAL_MAP] || 'STUDENT'
-              
-              // Get permissions
-              const permissions = prismaUser.userRoles[0]?.role?.permissions?.map(
-                rp => rp.permission.name
-              ) || []
-
-              return {
-                id: prismaUser.id,
-                email: prismaUser.email,
-                name: prismaUser.profile?.fullName || prismaUser.email.split("@")[0],
-                role: primaryRole,
-                portal: portal,
-                permissions: permissions,
-              }
-            }
+          if (authError || !authData.user) {
+            console.error("[Auth] Supabase auth error:", authError)
+            return null
           }
-        } catch (prismaError) {
-          console.error("[Auth] Prisma error:", prismaError)
-        }
 
-        return null
+          // Get user metadata
+          const userMeta = authData.user.user_metadata || {}
+          const role = (userMeta.role as string) || "STUDENT"
+          const fullName = (userMeta.full_name as string) || authData.user.email?.split("@")[0] || "User"
+
+          // Map role to portal
+          const rolePortalMap: Record<string, string> = {
+            "SUPER_ADMIN": "ADMINISTRATION",
+            "SYSTEM_ADMIN": "ADMINISTRATION",
+            "ACADEMIC_DIRECTOR": "ACADEMIC",
+            "HEAD_OF_DOMAIN": "ACADEMIC",
+            "CATEGORY_LEAD": "ACADEMIC",
+            "INSTRUCTOR": "INSTRUCTOR",
+            "STUDENT": "STUDENT",
+          }
+          const portal = rolePortalMap[role] || "STUDENT"
+
+          return {
+            id: authData.user.id,
+            email: authData.user.email || normalizedEmail,
+            name: fullName,
+            role: role,
+            portal: portal,
+            permissions: [],
+          }
+        } catch (error) {
+          console.error("[Auth] Error:", error)
+          return null
+        }
       }
     })
   ],
@@ -77,8 +70,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = (user as any).role || ROLES.STUDENT
-        token.portal = (user as any).portal || 'STUDENT'
+        token.role = (user as any).role || "STUDENT"
+        token.portal = (user as any).portal || "STUDENT"
         token.permissions = (user as any).permissions || []
       }
       return token
