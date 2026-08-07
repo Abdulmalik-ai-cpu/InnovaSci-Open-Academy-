@@ -7,9 +7,12 @@ let supabaseAdmin: SupabaseClient | null = null
 function getSupabaseAdmin(): SupabaseClient {
   if (!supabaseAdmin) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     
     if (!supabaseUrl || !supabaseKey) {
+      console.error("[Auth] Missing Supabase configuration:")
+      console.error("[Auth] NEXT_PUBLIC_SUPABASE_URL:", supabaseUrl)
+      console.error("[Auth] SUPABASE_SERVICE_ROLE_KEY:", supabaseKey ? "set" : "missing")
       throw new Error("Missing Supabase configuration. Please check environment variables.")
     }
     
