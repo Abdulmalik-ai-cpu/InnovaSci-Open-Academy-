@@ -5,8 +5,15 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 function createPrismaClient(): PrismaClient {
-  if (!process.env.DATABASE_URL) {
+  let databaseUrl = process.env.DATABASE_URL
+  
+  if (!databaseUrl) {
     console.warn("[Prisma] WARNING: DATABASE_URL not set - database operations will fail")
+  }
+  
+  // Add SSL mode to connection string for Supabase
+  if (databaseUrl && !databaseUrl.includes("sslmode")) {
+    databaseUrl += databaseUrl.includes("?") ? "&sslmode=require" : "?sslmode=require"
   }
   
   const clientOptions: ConstructorParameters<typeof PrismaClient>[0] = {
@@ -15,10 +22,10 @@ function createPrismaClient(): PrismaClient {
       : ["error", "warn"],
   }
 
-  if (process.env.DATABASE_URL) {
+  if (databaseUrl) {
     clientOptions.datasources = {
       db: {
-        url: process.env.DATABASE_URL,
+        url: databaseUrl,
       },
     }
   }
