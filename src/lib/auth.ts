@@ -1,11 +1,28 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { createClient } from "@supabase/supabase-js"
+import { createClient, SupabaseClient } from "@supabase/supabase-js"
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-)
+let supabaseAdmin: SupabaseClient | null = null
+
+function getSupabaseAdmin(): SupabaseClient {
+  if (!supabaseAdmin) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Missing Supabase configuration. Please check environment variables.")
+    }
+    
+    supabaseAdmin = createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+        detectSessionInUrl: false,
+      },
+    })
+  }
+  return supabaseAdmin
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -23,8 +40,8 @@ export const authOptions: NextAuthOptions = {
         const normalizedEmail = credentials.email.toLowerCase().trim()
 
         try {
-          // Use Supabase Auth for authentication
-          const { data: authData, error: authError } = await supabaseAdmin.auth.signInWithPassword({
+          // Use Supabase Auth for authentication (lazy initialization)
+          const { data: authData, error: authError } = await getSupabaseAdmin().auth.signInWithPassword({
             email: normalizedEmail,
             password: credentials.password,
           })
